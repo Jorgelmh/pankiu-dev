@@ -1,7 +1,11 @@
 import logo from './logo.svg';
+import SocketClient from './socket/SocketClient'
 import './App.css';
 
 function App() {
+
+  const socketIO = new SocketClient(ENDPOINT)
+
   return (
     <div className="App">
       <header className="App-header">
