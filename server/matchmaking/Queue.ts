@@ -1,4 +1,4 @@
-import { PersonSearch } from '../interfaces/PersonSearch'
+import { PersonSearch } from '../interfaces/search/PersonSearch'
 /**
  *  ==========================
  *      MatchMaking Queues

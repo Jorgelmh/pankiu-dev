@@ -1,4 +1,4 @@
-import Patient from './entities/Patient'
+import Patient from '../entities/Patient'
 
 export enum searchParam {only_counselor, counselor_or_happy, other_people}
 

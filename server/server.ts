@@ -4,23 +4,17 @@ import {Application} from 'express'
 import {createServer, Server as HTTPServer} from 'http'
 import { Server as SocketIOServer } from "socket.io"
 import MatchMaking from './matchmaking/MatchMaking'
-import { PersonSearch } from './interfaces/PersonSearch'
+import { PersonSearch } from './interfaces/search/PersonSearch'
 import SocketRoom from './interfaces/SocketRoom'
 import { v4 as uuidv4 } from 'uuid'
 import { Match } from './interfaces/Match'
-import PatientSearch, { searchParam } from './interfaces/PatientSearch'
+import PatientSearch, { searchParam } from './interfaces/search/PatientSearch'
 import User from './interfaces/entities/User'
 import { decodePatientJWT, decodeCounselorJWT } from './middlewares/AuthToken'
 import Patient from './interfaces/entities/Patient'
 import Counselor from './interfaces/entities/Counselor'
-
-interface QueuePatient {
-    token: string,
-    param: searchParam
-}
-interface QueueCounselor{
-    token: string
-}
+import QueuePatient from './interfaces/QueueParam/QueuePatient'
+import QueueCounselor from './interfaces/QueueParam/QueueCounselor'
 
 /**
  *  ==========================
@@ -65,7 +59,7 @@ export default class Server{
 
     /* Register message passing channels */
     private registerChannels(): void{
-        
+
         this.io.on('connection', (socket) => {
             console.log(`User ${socket.id} has connected to the room`)
 

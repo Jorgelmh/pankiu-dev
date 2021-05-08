@@ -1,11 +1,10 @@
 import Queue from './Queue'
-import { PersonSearch } from '../interfaces/PersonSearch'
-import Patient, { searchParam } from '../interfaces/PatientSearch'
+import { PersonSearch } from '../interfaces/search/PersonSearch'
+import { searchParam } from '../interfaces/search/PatientSearch'
 import { Mood } from '../interfaces/entities/Patient'
-import Counselor from '../interfaces/CounselorSearch'
 import { Match } from '../interfaces/Match'
-import PatientSearch from '../interfaces/PatientSearch'
-import CounselorSearch from '../interfaces/CounselorSearch'
+import PatientSearch from '../interfaces/search/PatientSearch'
+import CounselorSearch from '../interfaces/search/CounselorSearch'
 
 /**
  *  ==============================
@@ -21,8 +20,8 @@ export default class MatchMaking {
 
     constructor(){
         /* Start empty queues */
-        this.patientsQueue = new Queue<Patient>()
-        this.counselorsQueue = new Queue<Counselor>()
+        this.patientsQueue = new Queue<PatientSearch>()
+        this.counselorsQueue = new Queue<CounselorSearch>()
     }
 
     /* Add person to their correspondent queue */
@@ -85,11 +84,11 @@ export default class MatchMaking {
     }
 
     /* Returns the queues for testing purposes */
-    public getPatientQueue() : Patient[]{
+    public getPatientQueue() : PatientSearch[]{
         return this.patientsQueue.getCollection()
     }
 
-    public getCounselorQueue() : Counselor[]{
+    public getCounselorQueue() : CounselorSearch[]{
         return this.counselorsQueue.getCollection()
     }
 

@@ -4,7 +4,7 @@
  * ============================
  */
 
-import Counselor from "./entities/Counselor";
+import Counselor from "../entities/Counselor";
 
 /* id -> socket.io id */
 export default interface CounselorSearch{

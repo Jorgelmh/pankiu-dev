@@ -1,8 +1,8 @@
 import MatchMaking from '../matchmaking/MatchMaking'
-import { searchParam } from '../interfaces/PatientSearch'
+import { searchParam } from '../interfaces/search/PatientSearch'
 import { Mood } from '../interfaces/entities/Patient'
-import PatientSearch from '../interfaces/PatientSearch'
-import { PersonSearch } from '../interfaces/PersonSearch'
+import PatientSearch from '../interfaces/search/PatientSearch'
+import { PersonSearch } from '../interfaces/search/PersonSearch'
 
 const person = {
     id: '1',

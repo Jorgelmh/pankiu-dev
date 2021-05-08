@@ -1,5 +1,5 @@
-import PersonSearch from './PersonSearch'
-import Patient from './PatientSearch'
+import { PersonSearch } from './search/PersonSearch'
+import Patient from './search/PatientSearch'
 /**
  *  ====================================
  *      TUPLE THAT CONTAINS A MATCH
