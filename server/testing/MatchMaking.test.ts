@@ -1,19 +1,13 @@
 import MatchMaking from '../matchmaking/MatchMaking'
 import { searchParam } from '../interfaces/search/PatientSearch'
 import { Mood } from '../interfaces/entities/Patient'
-import PatientSearch from '../interfaces/search/PatientSearch'
 import { PersonSearch } from '../interfaces/search/PersonSearch'
 
-const person = {
-    id: '1',
-        user: {
-            mood: Mood.Depressed,
-            username: 'TestUser',
-            isAdmin: false,
-            email: 'example@mail.com'
-        },
-        param: searchParam.only_counselor
-}
+/**
+ *  ====================================
+ *         TEST MATCHMAKING QUEUE
+ *  ====================================
+ */
 
 const testingPeople : PersonSearch[] = [
     {
