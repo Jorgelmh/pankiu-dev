@@ -8,13 +8,12 @@ import { PersonSearch } from './interfaces/search/PersonSearch'
 import SocketRoom from './interfaces/SocketRoom'
 import { v4 as uuidv4 } from 'uuid'
 import { Match } from './interfaces/Match'
-import PatientSearch, { searchParam } from './interfaces/search/PatientSearch'
-import User from './interfaces/entities/User'
 import { decodePatientJWT, decodeCounselorJWT } from './middlewares/AuthToken'
 import Patient from './interfaces/entities/Patient'
 import Counselor from './interfaces/entities/Counselor'
 import QueuePatient from './interfaces/QueueParam/QueuePatient'
 import QueueCounselor from './interfaces/QueueParam/QueueCounselor'
+import { CONNECT_TO_ROOM, QUEUE_USER, ROOM_FOUND } from './sockets/Channels'
 
 /**
  *  ==========================
@@ -64,7 +63,7 @@ export default class Server{
             console.log(`User ${socket.id} has connected to the room`)
 
             /* Patient queuing for matchmaking -> Uses token to get users data */
-            socket.on('Queue User', async (search: QueuePatient | QueueCounselor) => {
+            socket.on(QUEUE_USER, async (search: QueuePatient | QueueCounselor) => {
 
                 let person: PersonSearch
 
@@ -96,7 +95,7 @@ export default class Server{
             })
             
             /* Add socket to a room */
-            socket.on('Connect to Room', (roomid: string) => {
+            socket.on(CONNECT_TO_ROOM, (roomid: string) => {
                 /* Check that the user belongs to here */
                 if(this.rooms[roomid][0].id === socket.id || this.rooms[roomid][1].id === socket.id)
                     socket.join(roomid)
@@ -112,7 +111,7 @@ export default class Server{
         this.rooms[roomId] = match
 
         /* Communicate room to sockets */
-        this.io.to(match[0].id).to(match[1].id).emit('Room Found', roomId)
+        this.io.to(match[0].id).to(match[1].id).emit(ROOM_FOUND, {roomId})
     }
 
     /* Start listening to requests */
@@ -121,6 +120,11 @@ export default class Server{
         this.httpServer.listen(this.port, () => {
             callback(this.port)
         })
+    }
+
+    /* Get socket.io server instance */
+    public getServer() : SocketIOServer{
+        return this.io
     }
 }
 

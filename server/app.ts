@@ -1,4 +1,4 @@
-import Server from './server'
+import Server from './Server'
 
 /* Create server instance */
 const server = new Server()
