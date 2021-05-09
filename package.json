@@ -7,7 +7,7 @@
     "start": "ts-node ./server/app.ts",
     "test": "jest",
     "build": "cd server/client && npm install && npm run build",
-    "dev": "tsc && npm run build && npx nodemon --watch server -e ts --exec npx nodemon server/app"
+    "dev": "tsc && npm run build && npx nodemon --watch server -e ts --exec npx nodemon server/dist/app"
   },
   "author": "",
   "license": "ISC",
