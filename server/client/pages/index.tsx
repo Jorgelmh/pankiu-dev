@@ -5,6 +5,11 @@ export enum searchParam {
   counselor_or_happy,
   other_people,
 }
+enum Language {
+  Spanish,
+  English,
+}
+
 const HomePage = () => {
   let socket: SocketQueue
   useEffect(() => {
@@ -16,12 +21,18 @@ const HomePage = () => {
       <h1>Home Page</h1>
       <button
         onClick={() =>
-          socket.queuePatient('randomtoken1', searchParam.only_counselor)
+          socket.queuePatient('randomtoken1', searchParam.only_counselor, [
+            Language.English,
+          ])
         }
       >
         Queue Patient
       </button>
-      <button onClick={() => socket.queueCounselor('randomtoken2')}>
+      <button
+        onClick={() =>
+          socket.queueCounselor('randomtoken2', [Language.English])
+        }
+      >
         Queue Counselor{' '}
       </button>
     </>

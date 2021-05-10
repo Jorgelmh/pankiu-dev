@@ -16,11 +16,9 @@ class Queue {
     this.collection.push(person);
   }
   /* Remove first item in the queue */
-  dequeue() {
-    /* Cannot dequeue from an empty array */
-    if (this.collection.length == 0) return null;
+  dequeue(index) {
     /* Dequeue first element in the queue */
-    const person = this.collection.splice(0, 1)[0];
+    const person = this.collection.splice(index, 1)[0];
     return person;
   }
   /* Remove person from queue when disconnected or leaves the queue */

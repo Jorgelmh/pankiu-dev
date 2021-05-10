@@ -87,6 +87,7 @@ class Server {
               socketid: socket.id,
               user,
               param: search.param,
+              language: search.language,
             };
           } else {
             /* Model user search */
@@ -94,11 +95,52 @@ class Server {
             person = {
               socketid: socket.id,
               user,
+              language: search.language,
             };
           }
           /* Add patient to queue and look for a match */
           const match = this.matchMaking.addPerson(person);
           if (match) this.communicateMatch(match);
+        })
+      );
+      /* Queue guest user with a random identifier as ID */
+      socket.on(Channels_1.QUEUE_GUEST, (search) => {
+        /* Create a temporary patient */
+        const person = {
+          socketid: socket.id,
+          user: {
+            id: search.id,
+            username: search.name,
+            email: null,
+            isAdmin: false,
+            mood: search.mood,
+          },
+          language: search.language,
+          param: search.param,
+        };
+        /* Add patient to queue and look for a match */
+        const match = this.matchMaking.addPerson(person);
+        if (match) this.communicateMatch(match);
+      });
+      /* Enter Video Chat room -> Patient */
+      socket.on(Channels_1.ENTER_ROOM_PATIENT, ({ token, roomid, guestid }) =>
+        __awaiter(this, void 0, void 0, function* () {
+          /* If a token is sent then treat it like an User */
+          if (token) {
+            const user = yield AuthToken_1.decodePatientJWT(token);
+            return;
+          }
+          /* Then treat it like a guest */
+          if (guestid) {
+            return;
+          }
+        })
+      );
+      /* Enter Video Chat room -> Counselor */
+      socket.on(Channels_1.ENTER_ROOM_COUNSELOR, ({ token, roomid }) =>
+        __awaiter(this, void 0, void 0, function* () {
+          /* Model counselor */
+          const user = yield AuthToken_1.decodeCounselorJWT(token);
         })
       );
     });
