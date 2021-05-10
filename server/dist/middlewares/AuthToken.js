@@ -43,6 +43,7 @@ const Patient_1 = require("../interfaces/entities/Patient");
 const decodePatientJWT = (token) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const obj = {
+      id: 1,
       username: "Example",
       email: "example@email.com",
       isAdmin: false,
@@ -54,6 +55,7 @@ exports.decodePatientJWT = decodePatientJWT;
 const decodeCounselorJWT = (token) =>
   __awaiter(void 0, void 0, void 0, function* () {
     const obj = {
+      id: 2,
       username: "Example",
       email: "example@email.com",
       isAdmin: false,

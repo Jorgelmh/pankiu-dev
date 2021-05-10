@@ -1,6 +1,11 @@
-import Patient from '../entities/Patient'
+import Patient from "../entities/Patient";
+import { Language } from "../QueueParam/Language";
 
-export enum searchParam {only_counselor, counselor_or_happy, other_people}
+export enum searchParam {
+  only_counselor,
+  counselor_or_happy,
+  other_people,
+}
 
 /**
  *  ==========================
@@ -11,8 +16,9 @@ export enum searchParam {only_counselor, counselor_or_happy, other_people}
     id -> socket.io id
     param -> search param for matchmaking
 */
-export default interface PatientSearch{
-    id: string,
-    user: Patient
-    param: searchParam,
+export default interface PatientSearch {
+  socketid: string;
+  user: Patient;
+  param: searchParam;
+  language: Language[];
 }

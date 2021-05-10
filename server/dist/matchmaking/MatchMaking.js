@@ -45,11 +45,11 @@ class MatchMaking {
       /* Remove people match from the queue */
       const happyIndex = this.patientsQueue
         .getCollection()
-        .findIndex(({ id }) => id == happy.id);
+        .findIndex(({ user }) => user.id === happy.user.id);
       this.patientsQueue.getCollection().splice(happyIndex, 1);
       const notHappyIndex = this.patientsQueue
         .getCollection()
-        .findIndex(({ id }) => id == notHappy.id);
+        .findIndex(({ user }) => user.id === notHappy.user.id);
       this.patientsQueue.getCollection().splice(notHappyIndex, 1);
       return [happy, notHappy];
     }

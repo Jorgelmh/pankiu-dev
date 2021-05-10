@@ -25,7 +25,9 @@ class Queue {
   }
   /* Remove person from queue when disconnected or leaves the queue */
   remove(person) {
-    const index = this.collection.findIndex((entry) => entry.id === person.id);
+    const index = this.collection.findIndex(
+      (entry) => entry.user.id === person.user.id
+    );
     if (index >= 0) {
       this.collection.splice(index, 1);
       return true;

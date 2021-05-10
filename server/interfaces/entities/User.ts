@@ -3,9 +3,10 @@
  *      Abstract model for a User
  *  ===================================
  */
-
+/* Database id */
 export default interface User {
-    username: string,
-    email: string,
-    isAdmin: boolean,
+  id: number | string;
+  username: string;
+  email: string;
+  isAdmin: boolean;
 }

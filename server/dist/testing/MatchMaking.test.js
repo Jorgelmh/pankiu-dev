@@ -10,8 +10,9 @@ const Patient_1 = require("../interfaces/entities/Patient");
  */
 const testingPeople = [
   {
-    id: "1",
+    socketid: "1",
     user: {
+      id: 1,
       mood: Patient_1.Mood.Depressed,
       username: "TestUser",
       isAdmin: false,
@@ -20,8 +21,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.only_counselor,
   },
   {
-    id: "2",
+    socketid: "2",
     user: {
+      id: 2,
       mood: Patient_1.Mood.Depressed,
       username: "TestUser",
       isAdmin: false,
@@ -30,8 +32,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.only_counselor,
   },
   {
-    id: "3",
+    socketid: "3",
     user: {
+      id: 3,
       mood: Patient_1.Mood.Happy,
       username: "TestUser",
       isAdmin: false,
@@ -40,8 +43,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.other_people,
   },
   {
-    id: "4",
+    socketid: "4",
     user: {
+      id: 4,
       mood: Patient_1.Mood.Depressed,
       username: "TestUser",
       isAdmin: false,
@@ -50,8 +54,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.counselor_or_happy,
   },
   {
-    id: "5",
+    socketid: "5",
     user: {
+      id: 5,
       username: "TestUser",
       isAdmin: false,
       email: "example@mail.com",
@@ -59,8 +64,9 @@ const testingPeople = [
     },
   },
   {
-    id: "6",
+    socketid: "6",
     user: {
+      id: 6,
       username: "TestUser",
       isAdmin: false,
       email: "example@mail.com",
@@ -68,8 +74,9 @@ const testingPeople = [
     },
   },
   {
-    id: "7",
+    socketid: "7",
     user: {
+      id: 7,
       username: "TestUser",
       isAdmin: false,
       email: "example@mail.com",
@@ -77,8 +84,9 @@ const testingPeople = [
     },
   },
   {
-    id: "8",
+    socketid: "8",
     user: {
+      id: 8,
       username: "TestUser",
       mood: Patient_1.Mood.Depressed,
       isAdmin: false,
@@ -87,8 +95,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.counselor_or_happy,
   },
   {
-    id: "9",
+    socketid: "9",
     user: {
+      id: 9,
       username: "TestUser",
       mood: Patient_1.Mood.Depressed,
       isAdmin: false,
@@ -97,8 +106,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.counselor_or_happy,
   },
   {
-    id: "10",
+    socketid: "10",
     user: {
+      id: 10,
       username: "TestUser",
       mood: Patient_1.Mood.Depressed,
       isAdmin: false,
@@ -107,8 +117,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.only_counselor,
   },
   {
-    id: "11",
+    socketid: "11",
     user: {
+      id: 11,
       username: "TestUser",
       mood: Patient_1.Mood.Depressed,
       isAdmin: false,
@@ -117,8 +128,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.only_counselor,
   },
   {
-    id: "12",
+    socketid: "12",
     user: {
+      id: 12,
       username: "TestUser",
       mood: Patient_1.Mood.Happy,
       isAdmin: false,
@@ -127,8 +139,9 @@ const testingPeople = [
     param: PatientSearch_1.searchParam.other_people,
   },
   {
-    id: "13",
+    socketid: "12",
     user: {
+      id: 13,
       username: "TestUser",
       isAdmin: false,
       email: "example@mail.com",
@@ -136,8 +149,9 @@ const testingPeople = [
     },
   },
   {
-    id: "14",
+    socketid: "13",
     user: {
+      id: 14,
       username: "TestUser",
       mood: Patient_1.Mood.Happy,
       isAdmin: false,

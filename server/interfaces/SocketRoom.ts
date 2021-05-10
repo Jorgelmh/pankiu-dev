@@ -1,4 +1,5 @@
-import { Match } from './Match';
+import User from "./entities/User";
+import Patient from "./entities/Patient";
 
 /**
  *  =========================
@@ -6,6 +7,6 @@ import { Match } from './Match';
  *  =========================
  */
 /* Will be used for chatting rooms */
-export default interface SocketRoom{
-    [id: string] : Match
+export default interface SocketRoom {
+  [id: string]: [User, Patient];
 }

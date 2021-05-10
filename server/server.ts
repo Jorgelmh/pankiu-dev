@@ -13,7 +13,17 @@ import Patient from "./interfaces/entities/Patient";
 import Counselor from "./interfaces/entities/Counselor";
 import QueuePatient from "./interfaces/QueueParam/QueuePatient";
 import QueueCounselor from "./interfaces/QueueParam/QueueCounselor";
-import { CONNECT_TO_ROOM, QUEUE_USER, ROOM_FOUND } from "./sockets/Channels";
+import QueueGuest from "./interfaces/QueueParam/QueueGuest";
+import {
+  CONNECT_TO_ROOM,
+  QUEUE_USER,
+  ROOM_FOUND,
+  GET_ROOM_DETAILS,
+  ENTER_ROOM_PATIENT,
+  ENTER_ROOM_COUNSELOR,
+  QUEUE_GUEST,
+} from "./sockets/Channels";
+import PatientSearch, { searchParam } from "./interfaces/search/PatientSearch";
 
 /**
  *  ==========================
@@ -42,6 +52,7 @@ export default class Server {
     this.httpServer = createServer(this.app);
     this.io = new SocketIOServer(this.httpServer);
     this.matchMaking = new MatchMaking();
+    this.rooms = {};
   }
 
   /* Handle all routes of the sever: Further route objects will be added on the way */
@@ -58,7 +69,7 @@ export default class Server {
   /* Register message passing channels */
   private registerChannels(): void {
     this.io.on("connection", (socket) => {
-      console.log(`User ${socket.id} has connected to the room`);
+      console.log(`Socket id ${socket.id} has connected`);
 
       /* Patient queuing for matchmaking -> Uses token to get users data */
       socket.on(QUEUE_USER, async (search: QueuePatient | QueueCounselor) => {
@@ -66,18 +77,21 @@ export default class Server {
 
         /* If it's got a param that means this is a patient queue request */
         if ("param" in search) {
-          /* Decode and model the user */
+          /* Decode and model the user search */
           const user: Patient = await decodePatientJWT(search.token);
           person = {
-            id: socket.id,
+            socketid: socket.id,
             user,
             param: search.param,
+            language: search.language,
           };
         } else {
+          /* Model user search */
           const user: Counselor = await decodeCounselorJWT(search.token);
           person = {
-            id: socket.id,
+            socketid: socket.id,
             user,
+            language: search.language,
           };
         }
 
@@ -87,14 +101,46 @@ export default class Server {
         if (match) this.communicateMatch(match);
       });
 
-      /* Add socket to a room */
-      socket.on(CONNECT_TO_ROOM, (roomid: string) => {
-        /* Check that the user belongs to here */
-        if (
-          this.rooms[roomid][0].id === socket.id ||
-          this.rooms[roomid][1].id === socket.id
-        )
-          socket.join(roomid);
+      /* Queue guest user with a random identifier as ID */
+      socket.on(QUEUE_GUEST, (search: QueueGuest) => {
+        /* Create a temporary patient */
+        const person: PatientSearch = {
+          socketid: socket.id,
+          user: {
+            id: search.id,
+            username: search.name,
+            email: null,
+            isAdmin: false,
+            mood: search.mood,
+          },
+          language: search.language,
+          param: search.param,
+        };
+
+        /* Add patient to queue and look for a match */
+        const match = this.matchMaking.addPerson(person);
+        if (match) this.communicateMatch(match);
+      });
+
+      /* Enter Video Chat room -> Patient */
+      socket.on(ENTER_ROOM_PATIENT, async ({ token, roomid, guestid }) => {
+        /* If a token is sent then treat it like an User */
+        if (token) {
+          const user = await decodePatientJWT(token);
+
+          return;
+        }
+
+        /* Then treat it like a guest */
+        if (guestid) {
+          return;
+        }
+      });
+
+      /* Enter Video Chat room -> Counselor */
+      socket.on(ENTER_ROOM_COUNSELOR, async ({ token, roomid }) => {
+        /* Model counselor */
+        const user = await decodeCounselorJWT(token);
       });
     });
   }
@@ -103,10 +149,13 @@ export default class Server {
   private communicateMatch(match: Match): void {
     /* Create random unique Id for the socket room */
     const roomId = uuidv4();
-    this.rooms[roomId] = match;
+    this.rooms[roomId] = [match[0].user, match[1].user];
 
     /* Communicate room to sockets */
-    this.io.to(match[0].id).to(match[1].id).emit(ROOM_FOUND, { roomId });
+    this.io
+      .to(match[0].socketid)
+      .to(match[1].socketid)
+      .emit(ROOM_FOUND, { roomId, room: this.rooms[roomId] });
   }
 
   /* Start listening to requests */
