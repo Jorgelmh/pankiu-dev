@@ -6,8 +6,12 @@ const Id = () => {
 
   useEffect(() => {
     import('../src/SocketRoom').then(({ default: SocketRoom }) => {
-      const peerId =
-        localStorage.getItem('guestid') || localStorage.getItem('token')
+      let peerId
+      const token = localStorage.getItem('token')
+
+      if (token) peerId = JSON.parse(atob(token.split('.')[1])).id
+      else peerId = localStorage.getItem('guestid')
+
       const videoGrid = document.getElementById('video-grid')
 
       /* Create socket communication instance */
