@@ -72,33 +72,30 @@ export default class SocketRoom {
   /* Handle socket messages */
   public handleMessages(): void {
     /* When the user has been confirmed to belong to the room we can stream */
-    this.socketClient.on(SET_UP_CALL, () => {
-      /* Get current users video stream */
-      navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-          audio: true,
-        })
-        .then((stream: MediaStream) => {
-          this.addVideoStream(this.userVideo, stream)
-          this.peerClient.on('call', (call) => {
-            console.log('Call incoming')
-            call.answer(stream)
-            call.on('stream', (otherUserStream: MediaStream) => {
-              this.addVideoStream(this.otherUserVideo, otherUserStream)
-            })
-          })
-
-          this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            console.log(`User ${peerid}: Connected - call them`)
-            this.connectToUser(String(peerid), stream)
-          })
-
-          this.socketClient.emit(JOINED_CALL, {
-            roomid: this.roomid,
-            peerid: this.peerId,
+    /* Get current users video stream */
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+        audio: true,
+      })
+      .then((stream: MediaStream) => {
+        this.addVideoStream(this.userVideo, stream)
+        this.peerClient.on('call', (call) => {
+          console.log('Call incoming')
+          call.answer(stream)
+          call.on('stream', (otherUserStream: MediaStream) => {
+            this.addVideoStream(this.otherUserVideo, otherUserStream)
           })
         })
+
+        this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
+          console.log(`User ${peerid}: Connected - call them`)
+          this.connectToUser(String(peerid), stream)
+        })
+      })
+    this.peerClient.on('open', (id) => {
+      console.log('sent my id')
+      this.socketClient.emit(JOINED_CALL, { roomid: this.roomid, peerid: id })
     })
   }
 

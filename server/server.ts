@@ -172,6 +172,7 @@ export default class Server {
 
       /* User joined the call */
       socket.on(JOINED_CALL, ({ roomid, peerid }) => {
+        console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
         socket.broadcast.emit(USER_CONNECTED, { peerid });
       });

@@ -179,7 +179,7 @@ class Server {
       );
       /* User joined the call */
       socket.on(Channels_1.JOINED_CALL, ({ roomid, peerid }) => {
-        console.log(peerid);
+        console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
         socket.broadcast.emit(Channels_1.USER_CONNECTED, { peerid });
       });
