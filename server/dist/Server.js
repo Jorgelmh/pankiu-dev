@@ -49,7 +49,7 @@ const Channels_1 = require("./sockets/Channels");
 /* Create the express and socket.io server */
 class Server {
   constructor() {
-    this.port = 3000;
+    this.port = parseInt(process.env.PORT || "3000");
     this.initialize();
     this.registerRoutes();
     this.registerChannels();

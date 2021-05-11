@@ -39,8 +39,7 @@ export default class Server {
   private io: SocketIOServer;
   private matchMaking: MatchMaking;
   private rooms: SocketRoom;
-
-  private readonly port = 3000;
+  private readonly port = parseInt(process.env.PORT || "3000");
 
   constructor() {
     this.initialize();
