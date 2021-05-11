@@ -90,7 +90,7 @@ export default class SocketRoom {
           })
 
           this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            console.log(`User peerid: Connected - call them`)
+            console.log(`User ${peerid}: Connected - call them`)
             this.connectToUser(String(peerid), stream)
           })
 
