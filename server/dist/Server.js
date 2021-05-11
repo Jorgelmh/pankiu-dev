@@ -125,13 +125,40 @@ class Server {
       /* Enter Video Chat room -> Patient */
       socket.on(Channels_1.ENTER_ROOM_PATIENT, ({ token, roomid, guestid }) =>
         __awaiter(this, void 0, void 0, function* () {
+          /* Check the roomid exists */
+          if (!this.rooms[roomid])
+            socket.emit(Channels_1.ROOM_ERROR, {
+              code: 1,
+              message: "Room not found",
+            });
           /* If a token is sent then treat it like an User */
           if (token) {
             const user = yield AuthToken_1.decodePatientJWT(token);
+            /* Check the user belongs to the room */
+            if (this.rooms[roomid][1].id === user.id) {
+              socket.join(roomid);
+              socket.emit(Channels_1.SET_UP_CALL, {
+                id: this.rooms[roomid][0].id,
+              });
+            } else
+              socket.emit(Channels_1.ROOM_ERROR, {
+                code: 2,
+                message: "You may not belong to this room",
+              });
             return;
           }
           /* Then treat it like a guest */
           if (guestid) {
+            if (this.rooms[roomid][1].id === guestid) {
+              socket.join(roomid);
+              socket.emit(Channels_1.SET_UP_CALL, {
+                id: this.rooms[roomid][0].id,
+              });
+            } else
+              socket.emit(Channels_1.ROOM_ERROR, {
+                code: 2,
+                message: "You may not belong to this room",
+              });
             return;
           }
         })
@@ -141,8 +168,19 @@ class Server {
         __awaiter(this, void 0, void 0, function* () {
           /* Model counselor */
           const user = yield AuthToken_1.decodeCounselorJWT(token);
+          if (this.rooms[roomid][0].id === user.id) {
+            socket.join(roomid);
+            socket.emit(Channels_1.SET_UP_CALL, {
+              id: this.rooms[roomid][1].id,
+            });
+          }
         })
       );
+      /* User joined the call */
+      socket.on(Channels_1.JOINED_CALL, ({ roomid, peerid }) => {
+        /* Contact other sockets connected */
+        socket.broadcast.to(roomid).emit(Channels_1.USER_CONNECTED, { peerid });
+      });
     });
   }
   /* Create a socket room and communicate those sockets they're match */

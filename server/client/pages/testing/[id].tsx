@@ -5,7 +5,7 @@ const Id = () => {
   const router = useRouter()
   return (
     <>
-      <h1>Testing page {router.query.id}</h1>
+      <h1>Testing page {router.query.roomid}</h1>
     </>
   )
 }

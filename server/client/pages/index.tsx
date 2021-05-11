@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import SocketQueue from '../src/SocketQueue'
+import { useRouter } from 'next/router'
+
 export enum searchParam {
   only_counselor,
   counselor_or_happy,
@@ -12,8 +14,12 @@ enum Language {
 
 const HomePage = () => {
   let socket: SocketQueue
+  const router = useRouter()
+
   useEffect(() => {
-    socket = new SocketQueue((roomId) => console.log(roomId))
+    socket = new SocketQueue((roomId) =>
+      router.push(`/testing?roomid:${roomId}`)
+    )
   })
 
   return (
