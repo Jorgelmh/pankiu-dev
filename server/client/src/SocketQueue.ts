@@ -71,7 +71,7 @@ export default class SocketQueue {
   ): void {
     /* Create and record the temporary id */
     const uid = uuidv4()
-    localStorage.setItem('guestID', uid)
+    localStorage.setItem('guestid', uid)
 
     /* Guest request */
     const guest: QueueGuest = {

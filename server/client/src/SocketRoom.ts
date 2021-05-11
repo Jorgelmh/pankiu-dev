@@ -22,15 +22,20 @@ export default class SocketRoom {
 
   /* PeerJS connection */
   private peerClient: Peer
+  private userVideo: HTMLVideoElement
+  private otherUserVideo: HTMLVideoElement
 
   constructor(
     private roomid: string,
     private peerId: number | string,
-    private userVideo: HTMLVideoElement,
-    private otherUserVideo: HTMLVideoElement
+    private videoGrid: HTMLElement
   ) {
     this.socketClient = socketIOClient(this.ENDPOINT)
     this.peerClient = new Peer(String(roomid))
+    this.userVideo = document.createElement('video')
+    this.userVideo.muted = true
+    this.otherUserVideo = document.createElement('video')
+    this.handleMessages()
   }
 
   /* Enter to socket.io room on the server */
@@ -55,12 +60,12 @@ export default class SocketRoom {
     }
 
     /* Otherwise it is a GUEST */
-    const guestId = localStorage.getItem('guestID')
-    if (guestId) {
+    const guestid = localStorage.getItem('guestid')
+    if (guestid) {
       this.socketClient.emit(ENTER_ROOM_PATIENT, {
         token: null,
         roomid: this.roomid,
-        guestId,
+        guestid,
       })
     }
   }
@@ -78,19 +83,24 @@ export default class SocketRoom {
         .then((stream: MediaStream) => {
           this.addVideoStream(this.userVideo, stream)
           this.peerClient.on('call', (call) => {
+            console.log('Call incoming')
             call.answer(stream)
             call.on('stream', (otherUserStream: MediaStream) => {
               this.addVideoStream(this.otherUserVideo, otherUserStream)
             })
           })
 
-          this.socketClient.on(USER_CONNECTED, ({ id }) => {
-            this.connectToUser(String(id), stream)
+          this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
+            console.log(`User peerid: Connected - call them`)
+            this.connectToUser(String(peerid), stream)
           })
         })
 
       this.peerClient.on('open', () => {
-        this.socketClient.emit(JOINED_CALL, this.peerId)
+        this.socketClient.emit(JOINED_CALL, {
+          roomid: this.roomid,
+          peerid: this.peerId,
+        })
       })
     })
   }
@@ -101,6 +111,7 @@ export default class SocketRoom {
     video.addEventListener('loadedmetadata', () => {
       video.play()
     })
+    this.videoGrid.append(video)
   }
 
   /* Connect to the other user */
