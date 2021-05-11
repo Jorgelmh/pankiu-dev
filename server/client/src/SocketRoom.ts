@@ -93,14 +93,12 @@ export default class SocketRoom {
             console.log(`User peerid: Connected - call them`)
             this.connectToUser(String(peerid), stream)
           })
-        })
 
-      this.peerClient.on('open', () => {
-        this.socketClient.emit(JOINED_CALL, {
-          roomid: this.roomid,
-          peerid: this.peerId,
+          this.socketClient.emit(JOINED_CALL, {
+            roomid: this.roomid,
+            peerid: this.peerId,
+          })
         })
-      })
     })
   }
 
