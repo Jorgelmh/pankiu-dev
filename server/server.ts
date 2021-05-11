@@ -15,13 +15,15 @@ import QueuePatient from "./interfaces/QueueParam/QueuePatient";
 import QueueCounselor from "./interfaces/QueueParam/QueueCounselor";
 import QueueGuest from "./interfaces/QueueParam/QueueGuest";
 import {
-  CONNECT_TO_ROOM,
   QUEUE_USER,
   ROOM_FOUND,
-  GET_ROOM_DETAILS,
   ENTER_ROOM_PATIENT,
   ENTER_ROOM_COUNSELOR,
   QUEUE_GUEST,
+  SET_UP_CALL,
+  USER_CONNECTED,
+  JOINED_CALL,
+  ROOM_ERROR,
 } from "./sockets/Channels";
 import PatientSearch, { searchParam } from "./interfaces/search/PatientSearch";
 
@@ -124,15 +126,35 @@ export default class Server {
 
       /* Enter Video Chat room -> Patient */
       socket.on(ENTER_ROOM_PATIENT, async ({ token, roomid, guestid }) => {
+        /* Check the roomid exists */
+        if (!this.rooms[roomid])
+          socket.emit(ROOM_ERROR, { code: 1, message: "Room not found" });
         /* If a token is sent then treat it like an User */
         if (token) {
           const user = await decodePatientJWT(token);
 
+          /* Check the user belongs to the room */
+          if (this.rooms[roomid][1].id === user.id) {
+            socket.join(roomid);
+            socket.emit(SET_UP_CALL, { id: this.rooms[roomid][0].id });
+          } else
+            socket.emit(ROOM_ERROR, {
+              code: 2,
+              message: "You may not belong to this room",
+            });
           return;
         }
 
         /* Then treat it like a guest */
         if (guestid) {
+          if (this.rooms[roomid][1].id === guestid) {
+            socket.join(roomid);
+            socket.emit(SET_UP_CALL, { id: this.rooms[roomid][0].id });
+          } else
+            socket.emit(ROOM_ERROR, {
+              code: 2,
+              message: "You may not belong to this room",
+            });
           return;
         }
       });
@@ -141,6 +163,16 @@ export default class Server {
       socket.on(ENTER_ROOM_COUNSELOR, async ({ token, roomid }) => {
         /* Model counselor */
         const user = await decodeCounselorJWT(token);
+        if (this.rooms[roomid][0].id === user.id) {
+          socket.join(roomid);
+          socket.emit(SET_UP_CALL, { id: this.rooms[roomid][1].id });
+        }
+      });
+
+      /* User joined the call */
+      socket.on(JOINED_CALL, ({ roomid, peerid }) => {
+        /* Contact other sockets connected */
+        socket.broadcast.to(roomid).emit(USER_CONNECTED, { peerid });
       });
     });
   }

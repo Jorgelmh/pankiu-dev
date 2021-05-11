@@ -11,3 +11,7 @@ export const GET_ROOM_DETAILS = "Room Details";
 export const ENTER_ROOM_PATIENT = "Enter Video Chat PATIENT";
 export const ENTER_ROOM_COUNSELOR = "Enter Video Chat COUNSELOR";
 export const QUEUE_GUEST = "Queue Guest";
+export const SET_UP_CALL = "Set Up Call";
+export const USER_CONNECTED = "User Connected";
+export const JOINED_CALL = "Joined Call";
+export const ROOM_ERROR = "Room Error";
