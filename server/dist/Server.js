@@ -147,6 +147,7 @@ class Server {
               });
             return;
           }
+          console.log(token, roomid, guestid);
           /* Then treat it like a guest */
           if (guestid) {
             if (this.rooms[roomid][1].id === guestid) {
@@ -193,6 +194,7 @@ class Server {
       .to(match[0].socketid)
       .to(match[1].socketid)
       .emit(Channels_1.ROOM_FOUND, { roomId, room: this.rooms[roomId] });
+    console.log(this.rooms[roomId]);
   }
   /* Start listening to requests */
   listen(callback) {
