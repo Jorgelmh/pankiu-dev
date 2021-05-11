@@ -21,12 +21,11 @@ import QueueCounselor from '../../interfaces/QueueParam/QueueCounselor'
 /* Use it to implement the Matchmaking communication process */
 export default class SocketQueue {
   /* Socket.io server address */
-  private readonly ENDPOINT = 'http://127.0.0.1:3000/'
   private socketIO: Socket
 
   /* Creates and initializes a socket */
   public constructor(private redirectToRoom: (roomId: string) => void) {
-    this.socketIO = socketIOClient(this.ENDPOINT)
+    this.socketIO = socketIOClient()
     this.handleMessages()
   }
 

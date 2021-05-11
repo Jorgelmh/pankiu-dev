@@ -18,7 +18,6 @@ import Peer from 'peerjs'
 export default class SocketRoom {
   /* Socket.io client */
   private socketClient: Socket
-  private readonly ENDPOINT = 'http://127.0.0.1:3000/'
 
   /* PeerJS connection */
   private peerClient: Peer
@@ -30,7 +29,7 @@ export default class SocketRoom {
     private peerId: number | string,
     private videoGrid: HTMLElement
   ) {
-    this.socketClient = socketIOClient(this.ENDPOINT)
+    this.socketClient = socketIOClient()
     this.peerClient = new Peer(String(roomid))
     this.userVideo = document.createElement('video')
     this.userVideo.muted = true
