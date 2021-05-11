@@ -173,7 +173,7 @@ export default class Server {
       /* User joined the call */
       socket.on(JOINED_CALL, ({ roomid, peerid }) => {
         /* Contact other sockets connected */
-        socket.broadcast.to(roomid).emit(USER_CONNECTED, { peerid });
+        socket.broadcast.emit(USER_CONNECTED, { peerid });
       });
     });
   }
