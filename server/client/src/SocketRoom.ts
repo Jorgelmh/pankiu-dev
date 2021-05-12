@@ -31,13 +31,8 @@ export default class SocketRoom {
   ) {
     this.socketClient = socketIOClient()
     this.peerClient = new Peer(String(this.peerId), {
-      debug: 2,
-      config: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-        ],
-      },
+      host: '/',
+      port: 3001,
     })
     this.userVideo = document.createElement('video')
     this.userVideo.muted = true
@@ -80,34 +75,27 @@ export default class SocketRoom {
   /* Handle socket messages */
   public handleMessages(): void {
     /* When the user has been confirmed to belong to the room we can stream */
-    this.socketClient.on(SET_UP_CALL, () => {
-      /* Get current users video stream */
-      navigator.mediaDevices
-        .getUserMedia({
-          video: true,
-          audio: true,
-        })
-        .then((stream: MediaStream) => {
-          this.addVideoStream(this.userVideo, stream)
-          this.peerClient.on('call', (call) => {
-            console.log('Call incoming')
-            call.answer(stream)
-            call.on('stream', (otherUserStream: MediaStream) => {
-              this.addVideoStream(this.otherUserVideo, otherUserStream)
-            })
-          })
-
-          this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            console.log(`User ${peerid}: Connected - call them`)
-            this.connectToUser(String(peerid), stream)
-          })
-
-          this.socketClient.emit(JOINED_CALL, {
-            roomid: this.roomid,
-            peerid: this.peerId,
+    /* Get current users video stream */
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+        audio: true,
+      })
+      .then((stream: MediaStream) => {
+        this.addVideoStream(this.userVideo, stream)
+        this.peerClient.on('call', (call) => {
+          console.log('Call incoming')
+          call.answer(stream)
+          call.on('stream', (otherUserStream: MediaStream) => {
+            this.addVideoStream(this.otherUserVideo, otherUserStream)
           })
         })
-    })
+
+        document.getElementById('call')?.addEventListener('click', () => {
+          const id = window.prompt('Enter id: ')
+          if (id) this.connectToUser(id, stream)
+        })
+      })
   }
 
   /* Add video stream */
@@ -121,7 +109,6 @@ export default class SocketRoom {
 
   /* Connect to the other user */
   public connectToUser(id: string, stream: MediaStream): void {
-    console.log(id)
     const call = this.peerClient.call(id, stream)
     call.on('stream', (userVideoStream: MediaStream) => {
       this.addVideoStream(this.otherUserVideo, userVideoStream)
