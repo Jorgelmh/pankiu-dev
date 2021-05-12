@@ -106,6 +106,7 @@ export default class SocketRoom {
 
   /* Add video stream */
   public addVideoStream(video: HTMLVideoElement, stream: MediaStream): void {
+    console.log(stream)
     video.srcObject = stream
     video.addEventListener('loadeddata', () => {
       video.play()
