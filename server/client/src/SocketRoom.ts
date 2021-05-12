@@ -97,6 +97,10 @@ export default class SocketRoom {
           peerid: this.peerId,
         })
       })
+
+    this.peerClient.on('error', (err) => {
+      console.log(err)
+    })
   }
 
   /* Add video stream */
