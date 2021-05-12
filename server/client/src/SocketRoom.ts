@@ -30,7 +30,15 @@ export default class SocketRoom {
     private videoGrid: HTMLElement
   ) {
     this.socketClient = socketIOClient()
-    this.peerClient = new Peer(String(this.peerId))
+    this.peerClient = new Peer(String(this.peerId), {
+      debug: 2,
+      config: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+        ],
+      },
+    })
     this.userVideo = document.createElement('video')
     this.userVideo.muted = true
     this.otherUserVideo = document.createElement('video')
