@@ -113,6 +113,7 @@ export default class SocketRoom {
 
   /* Connect to the other user */
   public connectToUser(id: string, stream: MediaStream): void {
+    console.log(id)
     const call = this.peerClient.call(id, stream)
     call.on('stream', (userVideoStream: MediaStream) => {
       this.addVideoStream(this.otherUserVideo, userVideoStream)
