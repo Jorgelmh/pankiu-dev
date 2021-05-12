@@ -6,11 +6,7 @@ const Id = () => {
 
   useEffect(() => {
     import('../src/SocketRoom').then(({ default: SocketRoom }) => {
-      let peerId
-      const token = localStorage.getItem('token')
-
-      if (token) peerId = JSON.parse(atob(token.split('.')[1])).id
-      else peerId = localStorage.getItem('guestid')
+      let peerId = localStorage.getItem('guestid')
 
       const videoGrid = document.getElementById('video-grid')
 

@@ -93,6 +93,10 @@ export default class SocketQueue {
    *  @param Token {string} - JWT of the user
    */
   public queueCounselor(token: string, language: Language[]): void {
+    /* Create and record the temporary id */
+    const uid = uuidv4()
+    localStorage.setItem('guestid', uid)
+
     /* Model a Counselor's Queue request */
     const counselor: QueueCounselor = {
       token,
