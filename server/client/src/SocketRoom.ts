@@ -95,7 +95,10 @@ export default class SocketRoom {
       })
     this.peerClient.on('open', (id) => {
       console.log('sent my id')
-      this.socketClient.emit(JOINED_CALL, { roomid: this.roomid, peerid: id })
+      this.socketClient.emit(JOINED_CALL, {
+        roomid: this.roomid,
+        peerid: this.peerId,
+      })
     })
   }
 
