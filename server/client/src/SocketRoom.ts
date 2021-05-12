@@ -30,10 +30,7 @@ export default class SocketRoom {
     private videoGrid: HTMLElement
   ) {
     this.socketClient = socketIOClient()
-    this.peerClient = new Peer(String(this.peerId), {
-      host: '/',
-      port: 3001,
-    })
+    this.peerClient = new Peer(String(this.peerId))
     this.userVideo = document.createElement('video')
     this.userVideo.muted = true
     this.otherUserVideo = document.createElement('video')
@@ -83,6 +80,7 @@ export default class SocketRoom {
       })
       .then((stream: MediaStream) => {
         this.addVideoStream(this.userVideo, stream)
+
         this.peerClient.on('call', (call) => {
           console.log('Call incoming')
           call.answer(stream)
@@ -109,6 +107,7 @@ export default class SocketRoom {
 
   /* Connect to the other user */
   public connectToUser(id: string, stream: MediaStream): void {
+    console.log(`Calling id ${id}`)
     const call = this.peerClient.call(id, stream)
     call.on('stream', (userVideoStream: MediaStream) => {
       this.addVideoStream(this.otherUserVideo, userVideoStream)

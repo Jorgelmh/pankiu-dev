@@ -17,6 +17,7 @@ const Id = () => {
       /* Create socket communication instance */
       const roomid = router.query.roomid
       if (typeof roomid == 'string' && peerId && videoGrid) {
+        console.log(peerId)
         const socket = new SocketRoom(roomid, peerId, videoGrid)
         socket.enterSocketRoom()
       }
