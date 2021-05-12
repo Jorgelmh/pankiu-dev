@@ -91,14 +91,12 @@ export default class SocketRoom {
         this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
           this.connectToUser(peerid, stream)
         })
-      })
 
-    this.peerClient.on('open', (id) => {
-      this.socketClient.emit(JOINED_CALL, {
-        roomid: this.roomid,
-        peerid: this.peerId,
+        this.socketClient.emit(JOINED_CALL, {
+          roomid: this.roomid,
+          peerid: this.peerId,
+        })
       })
-    })
   }
 
   /* Add video stream */
