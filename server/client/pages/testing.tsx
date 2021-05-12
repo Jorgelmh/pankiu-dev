@@ -27,6 +27,7 @@ const Id = () => {
     <>
       <h1>Testing page {router.query.roomid}</h1>
       <div id="video-grid"></div>
+      <button id="call">call</button>
     </>
   )
 }
