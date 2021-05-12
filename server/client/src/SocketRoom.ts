@@ -67,7 +67,9 @@ export default class SocketRoom {
           })
 
           this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            this.connectToUser(peerid, stream)
+            setTimeout(() => {
+              this.connectToUser(peerid, stream)
+            }, 1000)
           })
 
           this.socketClient.emit(JOINED_CALL, {
