@@ -9,7 +9,7 @@ import { searchParam } from "../search/PatientSearch";
 import { Language } from "./Language";
 
 export default interface QueueGuest {
-  id: string;
+  peerid: string;
   name: string;
   param: searchParam;
   mood: Mood;

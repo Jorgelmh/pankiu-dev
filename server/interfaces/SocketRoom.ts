@@ -8,5 +8,8 @@ import Patient from "./entities/Patient";
  */
 /* Will be used for chatting rooms */
 export default interface SocketRoom {
-  [id: string]: [User, Patient];
+  [id: string]: [
+    { peerid: string; user: User },
+    { peerid: string; user: Patient }
+  ];
 }

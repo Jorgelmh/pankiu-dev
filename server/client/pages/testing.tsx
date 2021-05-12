@@ -6,7 +6,7 @@ const Id = () => {
 
   useEffect(() => {
     import('../src/SocketRoom').then(({ default: SocketRoom }) => {
-      let peerId = localStorage.getItem('guestid')
+      const peerId = localStorage.getItem('guestid')
 
       const videoGrid = document.getElementById('video-grid')
 

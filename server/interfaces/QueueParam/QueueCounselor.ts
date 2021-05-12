@@ -6,6 +6,7 @@ import { Language } from "./Language";
  *  ==============================================
  */
 export default interface QueueCounselor {
+  peerid: string;
   token: string;
   language: Language[];
 }
