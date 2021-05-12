@@ -84,6 +84,7 @@ export default class SocketRoom {
           call.answer(stream)
           const userVideo = document.createElement('video')
           call.on('stream', (otherUserStream) => {
+            console.log('other person stream')
             this.addVideoStream(userVideo, otherUserStream)
           })
         })
