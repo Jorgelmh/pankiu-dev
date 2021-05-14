@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import SocketQueue from '../src/SocketQueue'
 import { useRouter } from 'next/router'
+import { Button } from '@progress/kendo-react-buttons'
 
 export enum searchParam {
   only_counselor,
@@ -42,7 +43,7 @@ const HomePage = () => {
   return (
     <>
       <h1>Home Page</h1>
-      <button
+      <Button
         onClick={() =>
           socket.queueGuest(
             'name',
@@ -53,15 +54,15 @@ const HomePage = () => {
         }
       >
         Queue Patient
-      </button>
-      <button
+      </Button>
+      <Button
         onClick={() => {
           localStorage.setItem('token', jwt)
           socket.queueCounselor(jwt, [Language.English])
         }}
       >
         Queue Counselor{' '}
-      </button>
+      </Button>
     </>
   )
 }
