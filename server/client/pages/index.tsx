@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import SocketQueue from '../src/SocketQueue'
 import { useRouter } from 'next/router'
-import { Button } from '@progress/kendo-react-buttons'
+import Button from '@atoms/button'
 
 export enum searchParam {
   only_counselor,
