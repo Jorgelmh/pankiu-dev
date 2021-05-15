@@ -54,22 +54,21 @@ export default class SocketRoom {
           audio: true,
         })
         .then((stream: MediaStream) => {
+          /* Display our stream */
           this.addVideoStream(this.myVideo, stream)
 
+          /* Receive calls from other users */
           this.peerClient.on('call', (call) => {
-            console.log('Call incoming')
             call.answer(stream)
             const userVideo = document.createElement('video')
             call.on('stream', (otherUserStream) => {
-              console.log('other person stream')
+              /* Display other person's stream */
               this.addVideoStream(userVideo, otherUserStream)
             })
           })
 
           this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            setTimeout(() => {
-              this.connectToUser(peerid, stream)
-            }, 1000)
+            this.connectToUser(peerid, stream)
           })
 
           this.socketClient.emit(JOINED_CALL, {
@@ -96,7 +95,6 @@ export default class SocketRoom {
 
   /* Connect to the other user */
   public connectToUser(id: string, stream: MediaStream): void {
-    console.log(`Calling id ${id}`)
     const call = this.peerClient.call(id, stream)
     const video = document.createElement('video')
     call.on('stream', (userVideoStream: MediaStream) => {
