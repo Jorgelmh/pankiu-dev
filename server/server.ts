@@ -24,7 +24,7 @@ import {
   JOINED_CALL,
   ROOM_ERROR,
 } from "./sockets/Channels";
-import PatientSearch, { searchParam } from "./interfaces/search/PatientSearch";
+import PatientSearch from "./interfaces/search/PatientSearch";
 
 /**
  *  ==========================
