@@ -25,7 +25,7 @@ import {
   JOINED_CALL,
   ROOM_ERROR,
 } from "./sockets/Channels";
-import PatientSearch, { searchParam } from "./interfaces/search/PatientSearch";
+import PatientSearch from "./interfaces/search/PatientSearch";
 
 /**
  *  ==========================
@@ -144,8 +144,6 @@ export default class Server {
             });
           return;
         }
-
-        console.log(token, roomid, guestid);
 
         /* Then treat it like a guest */
         if (guestid) {

@@ -83,7 +83,6 @@ export default class SocketRoom {
         .then((stream: MediaStream) => {
           this.addVideoStream(this.userVideo, stream)
           this.peerClient.on('call', (call) => {
-            console.log('Call incoming')
             call.answer(stream)
             call.on('stream', (otherUserStream: MediaStream) => {
               this.addVideoStream(this.otherUserVideo, otherUserStream)
@@ -91,7 +90,6 @@ export default class SocketRoom {
           })
 
           this.socketClient.on(USER_CONNECTED, ({ peerid }) => {
-            console.log(`User peerid: Connected - call them`)
             this.connectToUser(String(peerid), stream)
           })
         })
