@@ -1,11 +1,6 @@
 import socketIOClient, { Socket } from 'socket.io-client'
 import { searchParam } from '../../interfaces/search/PatientSearch'
-import {
-  CONNECT_TO_ROOM,
-  QUEUE_USER,
-  ROOM_FOUND,
-  QUEUE_GUEST,
-} from '../../sockets/Channels'
+import { QUEUE_USER, ROOM_FOUND, QUEUE_GUEST } from '../../sockets/Channels'
 import { v4 as uuidv4 } from 'uuid'
 import { Mood } from '../../interfaces/entities/Patient'
 import QueueGuest from '../../interfaces/QueueParam/QueueGuest'
@@ -43,8 +38,12 @@ export default class SocketQueue {
     param: searchParam,
     language: Language[]
   ): void {
+    const uid = uuidv4()
+    localStorage.setItem('guestid', uid)
+
     /* Model a patient's Queue request */
     const patient: QueuePatient = {
+      peerid: uid,
       token,
       param,
       language,
@@ -74,7 +73,7 @@ export default class SocketQueue {
 
     /* Guest request */
     const guest: QueueGuest = {
-      id: uid,
+      peerid: uid,
       name,
       mood,
       param,
@@ -93,8 +92,13 @@ export default class SocketQueue {
    *  @param Token {string} - JWT of the user
    */
   public queueCounselor(token: string, language: Language[]): void {
+    /* Create and record the temporary id */
+    const uid = uuidv4()
+    localStorage.setItem('guestid', uid)
+
     /* Model a Counselor's Queue request */
     const counselor: QueueCounselor = {
+      peerid: uid,
       token,
       language,
     }
@@ -105,9 +109,8 @@ export default class SocketQueue {
   /* Set up socket listeners */
   public handleMessages(): void {
     /* When a room has been found */
-    this.socketIO.on(ROOM_FOUND, ({ roomId, room }) => {
+    this.socketIO.on(ROOM_FOUND, ({ roomId }) => {
       /* Connect socket to chat */
-      this.socketIO.emit(CONNECT_TO_ROOM, roomId)
       this.redirectToRoom(roomId)
     })
   }

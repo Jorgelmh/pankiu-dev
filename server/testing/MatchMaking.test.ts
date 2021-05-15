@@ -13,6 +13,7 @@ import { Language } from "../interfaces/QueueParam/Language";
 const testingPeople: PersonSearch[] = [
   {
     socketid: "1",
+    peerid: "1",
     user: {
       id: 1,
       mood: Mood.Depressed,
@@ -25,6 +26,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "2",
+    peerid: "1",
     user: {
       id: 2,
       mood: Mood.Depressed,
@@ -37,6 +39,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "3",
+    peerid: "1",
     user: {
       id: 3,
       mood: Mood.Happy,
@@ -49,6 +52,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "4",
+    peerid: "1",
     user: {
       id: 4,
       mood: Mood.Depressed,
@@ -61,6 +65,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "5",
+    peerid: "1",
     user: {
       id: 5,
       username: "TestUser",
@@ -72,6 +77,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "6",
+    peerid: "1",
     user: {
       id: 6,
       username: "TestUser",
@@ -83,6 +89,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "7",
+    peerid: "1",
     user: {
       id: 7,
       username: "TestUser",
@@ -94,6 +101,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "8",
+    peerid: "1",
     user: {
       id: 8,
       username: "TestUser",
@@ -106,6 +114,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "9",
+    peerid: "1",
     user: {
       id: 9,
       username: "TestUser",
@@ -118,6 +127,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "10",
+    peerid: "1",
     user: {
       id: 10,
       username: "TestUser",
@@ -130,6 +140,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "11",
+    peerid: "1",
     user: {
       id: 11,
       username: "TestUser",
@@ -142,6 +153,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "12",
+    peerid: "1",
     user: {
       id: 12,
       username: "TestUser",
@@ -154,6 +166,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "13",
+    peerid: "1",
     user: {
       id: 13,
       username: "TestUser",
@@ -165,6 +178,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "14",
+    peerid: "1",
     user: {
       id: 14,
       username: "TestUser",
@@ -177,6 +191,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "15",
+    peerid: "1",
     user: {
       id: 15,
       username: "TestUser",
@@ -189,6 +204,7 @@ const testingPeople: PersonSearch[] = [
   },
   {
     socketid: "16",
+    peerid: "1",
     user: {
       id: 16,
       username: "TestUser",

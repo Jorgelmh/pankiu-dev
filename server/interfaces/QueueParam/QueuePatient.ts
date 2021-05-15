@@ -7,6 +7,7 @@ import { Language } from "./Language";
  */
 export default interface QueuePatient {
   token: string;
+  peerid: string;
   param: searchParam;
   language: Language[];
 }

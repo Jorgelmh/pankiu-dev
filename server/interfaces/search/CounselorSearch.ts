@@ -10,6 +10,7 @@ import { Language } from "../QueueParam/Language";
 /* id -> socket.io id */
 export default interface CounselorSearch {
   socketid: string;
+  peerid: string;
   user: Counselor;
   language: Language[];
 }

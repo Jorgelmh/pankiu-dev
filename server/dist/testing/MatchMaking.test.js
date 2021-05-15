@@ -12,6 +12,7 @@ const Language_1 = require("../interfaces/QueueParam/Language");
 const testingPeople = [
   {
     socketid: "1",
+    peerid: "1",
     user: {
       id: 1,
       mood: Patient_1.Mood.Depressed,
@@ -24,6 +25,7 @@ const testingPeople = [
   },
   {
     socketid: "2",
+    peerid: "1",
     user: {
       id: 2,
       mood: Patient_1.Mood.Depressed,
@@ -36,6 +38,7 @@ const testingPeople = [
   },
   {
     socketid: "3",
+    peerid: "1",
     user: {
       id: 3,
       mood: Patient_1.Mood.Happy,
@@ -48,6 +51,7 @@ const testingPeople = [
   },
   {
     socketid: "4",
+    peerid: "1",
     user: {
       id: 4,
       mood: Patient_1.Mood.Depressed,
@@ -60,6 +64,7 @@ const testingPeople = [
   },
   {
     socketid: "5",
+    peerid: "1",
     user: {
       id: 5,
       username: "TestUser",
@@ -71,6 +76,7 @@ const testingPeople = [
   },
   {
     socketid: "6",
+    peerid: "1",
     user: {
       id: 6,
       username: "TestUser",
@@ -82,6 +88,7 @@ const testingPeople = [
   },
   {
     socketid: "7",
+    peerid: "1",
     user: {
       id: 7,
       username: "TestUser",
@@ -93,6 +100,7 @@ const testingPeople = [
   },
   {
     socketid: "8",
+    peerid: "1",
     user: {
       id: 8,
       username: "TestUser",
@@ -105,6 +113,7 @@ const testingPeople = [
   },
   {
     socketid: "9",
+    peerid: "1",
     user: {
       id: 9,
       username: "TestUser",
@@ -117,6 +126,7 @@ const testingPeople = [
   },
   {
     socketid: "10",
+    peerid: "1",
     user: {
       id: 10,
       username: "TestUser",
@@ -129,6 +139,7 @@ const testingPeople = [
   },
   {
     socketid: "11",
+    peerid: "1",
     user: {
       id: 11,
       username: "TestUser",
@@ -141,6 +152,7 @@ const testingPeople = [
   },
   {
     socketid: "12",
+    peerid: "1",
     user: {
       id: 12,
       username: "TestUser",
@@ -153,6 +165,7 @@ const testingPeople = [
   },
   {
     socketid: "13",
+    peerid: "1",
     user: {
       id: 13,
       username: "TestUser",
@@ -164,6 +177,7 @@ const testingPeople = [
   },
   {
     socketid: "14",
+    peerid: "1",
     user: {
       id: 14,
       username: "TestUser",
@@ -176,6 +190,7 @@ const testingPeople = [
   },
   {
     socketid: "15",
+    peerid: "1",
     user: {
       id: 15,
       username: "TestUser",
@@ -188,6 +203,7 @@ const testingPeople = [
   },
   {
     socketid: "16",
+    peerid: "1",
     user: {
       id: 16,
       username: "TestUser",

@@ -17,15 +17,14 @@ import QueueGuest from "./interfaces/QueueParam/QueueGuest";
 import {
   QUEUE_USER,
   ROOM_FOUND,
-  ENTER_ROOM_PATIENT,
-  ENTER_ROOM_COUNSELOR,
+  ENTER_ROOM,
   QUEUE_GUEST,
   SET_UP_CALL,
   USER_CONNECTED,
   JOINED_CALL,
   ROOM_ERROR,
 } from "./sockets/Channels";
-import PatientSearch, { searchParam } from "./interfaces/search/PatientSearch";
+import PatientSearch from "./interfaces/search/PatientSearch";
 
 /**
  *  ==========================
@@ -82,6 +81,7 @@ export default class Server {
           const user: Patient = await decodePatientJWT(search.token);
           person = {
             socketid: socket.id,
+            peerid: search.peerid,
             user,
             param: search.param,
             language: search.language,
@@ -90,6 +90,7 @@ export default class Server {
           /* Model user search */
           const user: Counselor = await decodeCounselorJWT(search.token);
           person = {
+            peerid: search.peerid,
             socketid: socket.id,
             user,
             language: search.language,
@@ -107,8 +108,9 @@ export default class Server {
         /* Create a temporary patient */
         const person: PatientSearch = {
           socketid: socket.id,
+          peerid: search.peerid,
           user: {
-            id: search.id,
+            id: null,
             username: search.name,
             email: null,
             isAdmin: false,
@@ -124,49 +126,19 @@ export default class Server {
       });
 
       /* Enter Video Chat room -> Patient */
-      socket.on(ENTER_ROOM_PATIENT, async ({ token, roomid, guestid }) => {
-        /* Check the roomid exists */
-        if (!this.rooms[roomid])
-          socket.emit(ROOM_ERROR, { code: 1, message: "Room not found" });
-        /* If a token is sent then treat it like an User */
-        if (token) {
-          const user = await decodePatientJWT(token);
-
-          /* Check the user belongs to the room */
-          if (this.rooms[roomid][1].id === user.id) {
-            socket.join(roomid);
-            socket.emit(SET_UP_CALL, { id: this.rooms[roomid][0].id });
-          } else
-            socket.emit(ROOM_ERROR, {
-              code: 2,
-              message: "You may not belong to this room",
-            });
-          return;
-        }
-
-        console.log(token, roomid, guestid);
-
-        /* Then treat it like a guest */
-        if (guestid) {
-          if (this.rooms[roomid][1].id === guestid) {
-            socket.join(roomid);
-            socket.emit(SET_UP_CALL, { id: this.rooms[roomid][0].id });
-          } else
-            socket.emit(ROOM_ERROR, {
-              code: 2,
-              message: "You may not belong to this room",
-            });
-          return;
-        }
-      });
-
-      /* Enter Video Chat room -> Counselor */
-      socket.on(ENTER_ROOM_COUNSELOR, async ({ token, roomid }) => {
-        /* Model counselor */
-        const user = await decodeCounselorJWT(token);
-        if (this.rooms[roomid][0].id === user.id) {
+      socket.on(ENTER_ROOM, async ({ roomid, peerid }) => {
+        if (
+          this.rooms[roomid][1].peerid === peerid ||
+          this.rooms[roomid][0].peerid === peerid
+        ) {
           socket.join(roomid);
-          socket.emit(SET_UP_CALL, { id: this.rooms[roomid][1].id });
+          socket.emit(SET_UP_CALL);
+        } else {
+          socket.emit(ROOM_ERROR, {
+            code: 2,
+            message: "You may not belong to this room",
+          });
+          return;
         }
       });
 
@@ -183,15 +155,17 @@ export default class Server {
   private communicateMatch(match: Match): void {
     /* Create random unique Id for the socket room */
     const roomId = uuidv4();
-    this.rooms[roomId] = [match[0].user, match[1].user];
+
+    this.rooms[roomId] = [
+      { peerid: match[0].peerid, user: match[0].user },
+      { peerid: match[1].peerid, user: match[1].user },
+    ];
 
     /* Communicate room to sockets */
     this.io
       .to(match[0].socketid)
       .to(match[1].socketid)
-      .emit(ROOM_FOUND, { roomId, room: this.rooms[roomId] });
-
-    console.log(this.rooms[roomId]);
+      .emit(ROOM_FOUND, { roomId });
   }
 
   /* Start listening to requests */

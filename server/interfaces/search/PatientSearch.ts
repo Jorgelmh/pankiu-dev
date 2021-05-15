@@ -18,6 +18,7 @@ export enum searchParam {
 */
 export default interface PatientSearch {
   socketid: string;
+  peerid: string;
   user: Patient;
   param: searchParam;
   language: Language[];
