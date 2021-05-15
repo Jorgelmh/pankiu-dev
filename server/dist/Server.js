@@ -49,7 +49,7 @@ const Channels_1 = require("./sockets/Channels");
 /* Create the express and socket.io server */
 class Server {
   constructor() {
-    this.port = 3000;
+    this.port = parseInt(process.env.PORT || "3000");
     this.initialize();
     this.registerRoutes();
     this.registerChannels();
@@ -85,6 +85,7 @@ class Server {
             const user = yield AuthToken_1.decodePatientJWT(search.token);
             person = {
               socketid: socket.id,
+              peerid: search.peerid,
               user,
               param: search.param,
               language: search.language,
@@ -93,6 +94,7 @@ class Server {
             /* Model user search */
             const user = yield AuthToken_1.decodeCounselorJWT(search.token);
             person = {
+              peerid: search.peerid,
               socketid: socket.id,
               user,
               language: search.language,
@@ -108,8 +110,9 @@ class Server {
         /* Create a temporary patient */
         const person = {
           socketid: socket.id,
+          peerid: search.peerid,
           user: {
-            id: search.id,
+            id: null,
             username: search.name,
             email: null,
             isAdmin: false,
@@ -123,64 +126,28 @@ class Server {
         if (match) this.communicateMatch(match);
       });
       /* Enter Video Chat room -> Patient */
-      socket.on(Channels_1.ENTER_ROOM_PATIENT, ({ token, roomid, guestid }) =>
+      socket.on(Channels_1.ENTER_ROOM, ({ roomid, peerid }) =>
         __awaiter(this, void 0, void 0, function* () {
-          /* Check the roomid exists */
-          if (!this.rooms[roomid])
-            socket.emit(Channels_1.ROOM_ERROR, {
-              code: 1,
-              message: "Room not found",
-            });
-          /* If a token is sent then treat it like an User */
-          if (token) {
-            const user = yield AuthToken_1.decodePatientJWT(token);
-            /* Check the user belongs to the room */
-            if (this.rooms[roomid][1].id === user.id) {
-              socket.join(roomid);
-              socket.emit(Channels_1.SET_UP_CALL, {
-                id: this.rooms[roomid][0].id,
-              });
-            } else
-              socket.emit(Channels_1.ROOM_ERROR, {
-                code: 2,
-                message: "You may not belong to this room",
-              });
-            return;
-          }
-          console.log(token, roomid, guestid);
-          /* Then treat it like a guest */
-          if (guestid) {
-            if (this.rooms[roomid][1].id === guestid) {
-              socket.join(roomid);
-              socket.emit(Channels_1.SET_UP_CALL, {
-                id: this.rooms[roomid][0].id,
-              });
-            } else
-              socket.emit(Channels_1.ROOM_ERROR, {
-                code: 2,
-                message: "You may not belong to this room",
-              });
-            return;
-          }
-        })
-      );
-      /* Enter Video Chat room -> Counselor */
-      socket.on(Channels_1.ENTER_ROOM_COUNSELOR, ({ token, roomid }) =>
-        __awaiter(this, void 0, void 0, function* () {
-          /* Model counselor */
-          const user = yield AuthToken_1.decodeCounselorJWT(token);
-          if (this.rooms[roomid][0].id === user.id) {
+          if (
+            this.rooms[roomid][1].peerid === peerid ||
+            this.rooms[roomid][0].peerid === peerid
+          ) {
             socket.join(roomid);
-            socket.emit(Channels_1.SET_UP_CALL, {
-              id: this.rooms[roomid][1].id,
+            socket.emit(Channels_1.SET_UP_CALL);
+          } else {
+            socket.emit(Channels_1.ROOM_ERROR, {
+              code: 2,
+              message: "You may not belong to this room",
             });
+            return;
           }
         })
       );
       /* User joined the call */
       socket.on(Channels_1.JOINED_CALL, ({ roomid, peerid }) => {
+        console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
-        socket.broadcast.to(roomid).emit(Channels_1.USER_CONNECTED, { peerid });
+        socket.broadcast.emit(Channels_1.USER_CONNECTED, { peerid });
       });
     });
   }
@@ -188,13 +155,15 @@ class Server {
   communicateMatch(match) {
     /* Create random unique Id for the socket room */
     const roomId = uuid_1.v4();
-    this.rooms[roomId] = [match[0].user, match[1].user];
+    this.rooms[roomId] = [
+      { peerid: match[0].peerid, user: match[0].user },
+      { peerid: match[1].peerid, user: match[1].user },
+    ];
     /* Communicate room to sockets */
     this.io
       .to(match[0].socketid)
       .to(match[1].socketid)
-      .emit(Channels_1.ROOM_FOUND, { roomId, room: this.rooms[roomId] });
-    console.log(this.rooms[roomId]);
+      .emit(Channels_1.ROOM_FOUND, { roomId });
   }
   /* Start listening to requests */
   listen(callback) {
