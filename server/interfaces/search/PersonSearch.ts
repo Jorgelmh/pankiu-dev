@@ -1,5 +1,5 @@
-import Patient from './PatientSearch'
-import Counselor from './CounselorSearch'
+import PatientSearch from "./PatientSearch";
+import CounselorSearch from "./CounselorSearch";
 
 /**
  *  =================================================
@@ -9,4 +9,4 @@ import Counselor from './CounselorSearch'
 /*
     id -> socket.io id
 */
-export type PersonSearch = Patient | Counselor
+export type PersonSearch = PatientSearch | CounselorSearch;

@@ -8,7 +8,6 @@ import { PersonSearch } from "./interfaces/search/PersonSearch";
 import SocketRoom from "./interfaces/SocketRoom";
 import { v4 as uuidv4 } from "uuid";
 import { Match } from "./interfaces/Match";
-import { decodePatientJWT, decodeCounselorJWT } from "./middlewares/AuthToken";
 import Patient from "./interfaces/entities/Patient";
 import Counselor from "./interfaces/entities/Counselor";
 import QueuePatient from "./interfaces/QueueParam/QueuePatient";
@@ -23,8 +22,12 @@ import {
   USER_CONNECTED,
   JOINED_CALL,
   ROOM_ERROR,
+  QUEUE_ERROR,
 } from "./sockets/Channels";
 import PatientSearch from "./interfaces/search/PatientSearch";
+import API from "./routes/API";
+import Session from "./routes/sessions";
+import * as jwt from "jsonwebtoken";
 
 /**
  *  ==========================
@@ -49,6 +52,11 @@ export default class Server {
   /* Create server instances */
   private initialize(): void {
     this.app = express();
+
+    /* Add middlewares */
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json());
+
     this.httpServer = createServer(this.app);
     this.io = new SocketIOServer(this.httpServer);
     this.matchMaking = new MatchMaking();
@@ -60,8 +68,22 @@ export default class Server {
     /* Serve the static files of the Front-End application */
     this.app.use(express.static(path.join(__dirname, "../client/out")));
 
-    /* Map all requests to the REACT app */
-    this.app.get("*", (req, res) => {
+    /**
+     *  ============================
+     *      REGISTER THE REST API
+     *  ============================
+     */
+    new API(this.app);
+
+    /**
+     *  ===============================
+     *     REGISTER THE SESSION API
+     *  ===============================
+     */
+    new Session(this.app);
+
+    /* Map all other requests to the REACT app */
+    this.app.get("/*", (req, res) => {
       res.sendFile(path.join(__dirname, "../client/out/index.html"));
     });
   }
@@ -74,33 +96,42 @@ export default class Server {
       /* Patient queuing for matchmaking -> Uses token to get users data */
       socket.on(QUEUE_USER, async (search: QueuePatient | QueueCounselor) => {
         let person: PersonSearch;
+        jwt.verify(
+          search.token,
+          process.env.secret,
+          (err, decoded: Patient | Counselor) => {
+            /* If there's an error with the session token */
+            if (err) {
+              socket.emit(QUEUE_ERROR, { message: "The token is invalid" });
+            }
 
-        /* If it's got a param that means this is a patient queue request */
-        if ("param" in search) {
-          /* Decode and model the user search */
-          const user: Patient = await decodePatientJWT(search.token);
-          person = {
-            socketid: socket.id,
-            peerid: search.peerid,
-            user,
-            param: search.param,
-            language: search.language,
-          };
-        } else {
-          /* Model user search */
-          const user: Counselor = await decodeCounselorJWT(search.token);
-          person = {
-            peerid: search.peerid,
-            socketid: socket.id,
-            user,
-            language: search.language,
-          };
-        }
+            /* Check whether the user is already in the queue */
+            if (!this.matchMaking.canQueue(decoded.id)) return;
 
-        /* Add patient to queue and look for a match */
-        const match = this.matchMaking.addPerson(person);
+            /* Check whether it is a patient or a counselor */
+            if ("param" in search) {
+              person = {
+                socketid: socket.id,
+                peerid: search.peerid,
+                user: <Patient>decoded,
+                param: search.param,
+                language: search.language,
+              };
+            } else {
+              person = {
+                peerid: search.peerid,
+                socketid: socket.id,
+                user: <Counselor>decoded,
+                language: search.language,
+              };
+            }
 
-        if (match) this.communicateMatch(match);
+            /* Add patient to queue and look for a match */
+            const match = this.matchMaking.addPerson(person);
+
+            if (match) this.communicateMatch(match);
+          }
+        );
       });
 
       /* Queue guest user with a random identifier as ID */
@@ -147,6 +178,12 @@ export default class Server {
         console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
         socket.broadcast.emit(USER_CONNECTED, { peerid });
+      });
+
+      /* Handle a sudden disconnection */
+      socket.on("disconnect", () => {
+        /* Check if the socket belonged to any queue an remove it */
+        this.matchMaking.removePerson(socket.id);
       });
     });
   }

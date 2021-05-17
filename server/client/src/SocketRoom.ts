@@ -1,5 +1,4 @@
 import socketIOClient, { Socket } from 'socket.io-client'
-import User from '../../interfaces/entities/User'
 import {
   ENTER_ROOM,
   SET_UP_CALL,
@@ -87,7 +86,7 @@ export default class SocketRoom {
   public addVideoStream(video: HTMLVideoElement, stream: MediaStream): void {
     console.log(stream)
     video.srcObject = stream
-    video.addEventListener('loadeddata', () => {
+    video.addEventListener('loadedmetadata', () => {
       video.play()
     })
     this.videoGrid.append(video)

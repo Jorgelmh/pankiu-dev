@@ -33,8 +33,9 @@ var __awaiter =
     });
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.decodeCounselorJWT = exports.decodePatientJWT = void 0;
+exports.AuthToken = exports.decodeCounselorJWT = exports.decodePatientJWT = void 0;
 const Patient_1 = require("../interfaces/entities/Patient");
+const jwt = require("jsonwebtoken");
 /**
  *  ==========================
  *      OPERATIONS ON JWT
@@ -64,4 +65,35 @@ const decodeCounselorJWT = (token) =>
     return obj;
   });
 exports.decodeCounselorJWT = decodeCounselorJWT;
+/**
+ *  ========================================
+ *      MIDDLEWARE TO AUTHENTICATE JWT
+ *  ========================================
+ */
+const AuthToken = (req, res, next) => {
+  /* Get token from headers */
+  const token = process.env.secret;
+  /* Check whether a token has been sent along with the request */
+  if (token) {
+    jwt.verify(token, process.env.secret, (err, decoded) => {
+      /* If the token expired or not valid anymore redirect to login */
+      if (err) {
+        res.send(200).send({
+          ok: false,
+          redirect: "/login",
+        });
+      } else {
+        req.body.decoded = decoded;
+        next();
+      }
+    });
+  } else {
+    /* In case no token has been sent to this request */
+    res.send(200).send({
+      ok: false,
+      redirect: "/login",
+    });
+  }
+};
+exports.AuthToken = AuthToken;
 //# sourceMappingURL=AuthToken.js.map

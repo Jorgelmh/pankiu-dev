@@ -41,6 +41,7 @@ const MatchMaking_1 = require("./matchmaking/MatchMaking");
 const uuid_1 = require("uuid");
 const AuthToken_1 = require("./middlewares/AuthToken");
 const Channels_1 = require("./sockets/Channels");
+const API_1 = require("./routes/API");
 /**
  *  ==========================
  *        SERVER CLASS
@@ -57,6 +58,9 @@ class Server {
   /* Create server instances */
   initialize() {
     this.app = express();
+    /* Add middlewares */
+    this.app.use(express.urlencoded({ extended: true }));
+    this.app.use(express.json());
     this.httpServer = http_1.createServer(this.app);
     this.io = new socket_io_1.Server(this.httpServer);
     this.matchMaking = new MatchMaking_1.default();
@@ -66,8 +70,14 @@ class Server {
   registerRoutes() {
     /* Serve the static files of the Front-End application */
     this.app.use(express.static(path.join(__dirname, "../client/out")));
+    /**
+     *  ============================
+     *      REGISTER THE REST API
+     *  ============================
+     */
+    new API_1.default(this.app);
     /* Map all requests to the REACT app */
-    this.app.get("*", (req, res) => {
+    this.app.get("/*", (req, res) => {
       res.sendFile(path.join(__dirname, "../client/out/index.html"));
     });
   }

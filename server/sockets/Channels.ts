@@ -14,3 +14,6 @@ export const SET_UP_CALL = "Set Up Call";
 export const USER_CONNECTED = "User Connected";
 export const JOINED_CALL = "Joined Call";
 export const ROOM_ERROR = "Room Error";
+export const CHAT_MESSAGE_CALL = "Chat Message Call";
+export const CHAT_MESSAGE = "Chat Message";
+export const QUEUE_ERROR = "Queue Error";

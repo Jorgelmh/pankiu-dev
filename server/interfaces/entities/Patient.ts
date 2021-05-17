@@ -1,6 +1,13 @@
-import User from './User'
+import User from "./User";
 
-export enum Mood {Normal, Depressed, Anxious, Stressed, Lonely, Happy}
+export enum Mood {
+  Normal = "Normal",
+  Depressed = "Depressed",
+  Anxious = "Anxious",
+  Stressed = "Stressed",
+  Lonely = "Lonely",
+  Happy = "Happy",
+}
 
 /**
  *  ============================
@@ -8,6 +15,6 @@ export enum Mood {Normal, Depressed, Anxious, Stressed, Lonely, Happy}
  *  ============================
  */
 
-export default interface Patient extends User{
-    mood: Mood
+export default interface Patient extends User {
+  mood: Mood;
 }
