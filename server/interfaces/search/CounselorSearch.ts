@@ -5,12 +5,9 @@
  */
 
 import Counselor from "../entities/Counselor";
-import { Language } from "../QueueParam/Language";
+import Search from "./Search";
 
 /* id -> socket.io id */
-export default interface CounselorSearch {
-  socketid: string;
-  peerid: string;
+export default interface CounselorSearch extends Search {
   user: Counselor;
-  language: Language[];
 }

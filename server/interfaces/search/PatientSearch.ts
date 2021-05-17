@@ -1,4 +1,5 @@
 import Patient from "../entities/Patient";
+import Search from "./Search";
 import { Language } from "../QueueParam/Language";
 
 export enum searchParam {
@@ -16,10 +17,7 @@ export enum searchParam {
     id -> socket.io id
     param -> search param for matchmaking
 */
-export default interface PatientSearch {
-  socketid: string;
-  peerid: string;
+export default interface PatientSearch extends Search {
   user: Patient;
   param: searchParam;
-  language: Language[];
 }

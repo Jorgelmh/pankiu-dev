@@ -125,6 +125,38 @@ export default class MatchMaking {
     return null;
   }
 
+  /* Remove person from the queue when they disconnect */
+  public removePerson(socketId: string): void {
+    /* Check patient from patient queue */
+    const patientIndex = this.patientsQueue
+      .getCollection()
+      .findIndex((entry) => entry.socketid === socketId);
+
+    /* Remove disconnected person from queue */
+    if (patientIndex >= 0) {
+      this.patientsQueue.getCollection().splice(patientIndex, 1);
+      return;
+    }
+
+    /* Check counselor queue */
+    const counselorIndex = this.patientsQueue
+      .getCollection()
+      .findIndex((entry) => entry.socketid === socketId);
+
+    /* Remove disconnected person from queue */
+    if (counselorIndex >= 0) {
+      this.patientsQueue.getCollection().splice(counselorIndex, 1);
+      return;
+    }
+  }
+
+  /* Check if the user id is not in any queue already */
+  public canQueue(id: number): boolean {
+    if (this.patientsQueue.canQueue(id) && this.counselorsQueue.canQueue(id))
+      return true;
+    else return false;
+  }
+
   /* Returns the queues for testing purposes */
   public getPatientQueue(): PatientSearch[] {
     return this.patientsQueue.getCollection();
