@@ -16,12 +16,12 @@ const jwt =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJFeGFtcGxlIiwiZW1haWwiOiJleGFtcGxlQG1haWwuY29tIiwiaXNBZG1pbiI6ZmFsc2UsInJhdGUiOjV9.j99UPXCrRpCaU4R45ziBwZWaQYNUmqnuSclRZAXed94'
 
 export enum Mood {
-  Normal,
-  Depressed,
-  Anxious,
-  Stressed,
-  Lonely,
-  Happy,
+  Normal = 'Normal',
+  Depressed = 'Depressed',
+  Anxious = 'Anxious',
+  Stressed = 'Stressed',
+  Lonely = 'Lonely',
+  Happy = 'Happy',
 }
 
 const HomePage = () => {
