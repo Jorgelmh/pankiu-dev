@@ -3,6 +3,9 @@ import SocketQueue from '../src/SocketQueue'
 import { useRouter } from 'next/router'
 import Button from '@atoms/button'
 
+import TopBar from '@organisms/appbar'
+import Header from '@organisms/header'
+
 export enum searchParam {
   only_counselor,
   counselor_or_happy,
@@ -26,23 +29,26 @@ export enum Mood {
 }
 
 const HomePage = () => {
-  let socket: SocketQueue
-  const router = useRouter()
+  // let socket: SocketQueue
+  // const router = useRouter()
 
-  useEffect(() => {
-    socket = new SocketQueue((roomid) =>
-      router.push({
-        pathname: '/testing',
-        query: {
-          roomid,
-        },
-      })
-    )
-  })
+  // useEffect(() => {
+  //   socket = new SocketQueue((roomid) =>
+  //     router.push({
+  //       pathname: '/testing',
+  //       query: {
+  //         roomid,
+  //       },
+  //     })
+  //   )
+  // })
 
   return (
     <>
-      <h1>Home Page</h1>
+      <TopBar />
+      <Header />
+
+      {/* <h1>Home Page</h1>
       <Button
         onClick={() =>
           socket.queueGuest(
@@ -62,7 +68,7 @@ const HomePage = () => {
         }}
       >
         Queue Counselor{' '}
-      </Button>
+      </Button> */}
     </>
   )
 }
