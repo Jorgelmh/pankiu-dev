@@ -2,10 +2,8 @@ import React, { useState, useEffect } from 'react'
 import SocketQueue from '../src/SocketQueue'
 import { useRouter } from 'next/router'
 
-import Button from '@atoms/button'
-import TopBar from '@organisms/appbar'
+import TopBar from '@components/organisms/topbar'
 import Header from '@organisms/header'
-import Title from '@atoms/title'
 
 export enum searchParam {
   only_counselor,
