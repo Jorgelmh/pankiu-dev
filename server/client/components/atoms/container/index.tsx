@@ -1,10 +1,10 @@
 import { StyledContainer } from './styles'
 import ContainerProps from './types'
 
-const Container: React.FC<ContainerProps> = (props, { children }) => {
+const Container: React.FC<ContainerProps> = (props) => {
   return (
     <>
-      <StyledContainer {...props}>{children}</StyledContainer>
+      <StyledContainer {...props}>{props.children}</StyledContainer>
     </>
   )
 }

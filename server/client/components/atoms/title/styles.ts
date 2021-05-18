@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import Container from './types'
+import TitleProps from './types'
 
-export const StyledContainer = styled.div<Container>`
-  width: ${({ w = '0' }) => w};
-  height: ${({ h = '0' }) => h};
+export const StyledTitle = styled.h1<TitleProps>`
+  font-size: ${({ size = '12px' }) => size};
+  color: ${({ color = '#000000' }) => color};
 `

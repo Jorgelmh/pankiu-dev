@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import SocketQueue from '../src/SocketQueue'
 import { useRouter } from 'next/router'
-import Button from '@atoms/button'
 
+import Button from '@atoms/button'
 import TopBar from '@organisms/appbar'
 import Header from '@organisms/header'
+import Title from '@atoms/title'
 
 export enum searchParam {
   only_counselor,
@@ -28,7 +29,7 @@ export enum Mood {
   Happy,
 }
 
-const HomePage = () => {
+const Index = () => {
   // let socket: SocketQueue
   // const router = useRouter()
 
@@ -73,4 +74,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default Index

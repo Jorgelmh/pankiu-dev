@@ -1,4 +1,4 @@
-export default interface Container {
-  w?: string
-  h?: string
+export default interface TitleProps {
+  size?: string
+  color?: string
 }

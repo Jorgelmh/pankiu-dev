@@ -1,11 +1,12 @@
-import { StyledContainer } from './styles'
+import { StyledTitle } from './styles'
+import TitleProps from './types'
 
-const Container: React.FC = ({ children }) => {
+const Title: React.FC<TitleProps> = (props) => {
   return (
     <>
-      <StyledContainer>{children}</StyledContainer>
+      <StyledTitle {...props}>{props.children}</StyledTitle>
     </>
   )
 }
 
-export default Container
+export default Title
