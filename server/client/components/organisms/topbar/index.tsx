@@ -1,9 +1,10 @@
-import styled from 'styled-components'
 import {
   AppBarSection,
   AppBarSpacer,
   Avatar,
 } from '@progress/kendo-react-layout'
+
+import Logo from '@atoms/svg/logo'
 
 import { StyledAppBar } from './styles'
 
@@ -16,7 +17,7 @@ const TopBar: React.FC = ({ children }) => {
       <StyledAppBar>
         <AppBarSection>
           <button className="k-button k-button-clear">
-            <span className="k-icon k-i-menu" />
+            <Logo />
           </button>
         </AppBarSection>
 
