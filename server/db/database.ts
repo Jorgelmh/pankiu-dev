@@ -75,7 +75,7 @@ export const getMessages = async (
   const rows = <RowDataPacket[]>(
     await conn.execute(
       `SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND 
-        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=?`,
+        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=? ORDER BY date`,
       [id, otherId, otherId, id]
     )
   )[0];
@@ -153,7 +153,7 @@ export const getFriendRequests = async (
   const rows = <RowDataPacket[]>(
     await conn.execute(
       `SELECT friends.sender_id, users.username FROM 
-  friends, users WHERE friends.receiver_id=? AND friends.accepted=? AND users.id=friends.sender_id ORDER BY date`,
+  friends, users WHERE friends.receiver_id=? AND friends.accepted=? AND users.id=friends.sender_id ORDER BY friends.date`,
       [id, 0]
     )
   )[0];
