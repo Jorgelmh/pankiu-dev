@@ -8,7 +8,13 @@ import {
   ButtonGroup,
 } from '@progress/kendo-react-buttons'
 
-import { StyledHomeMain } from './styles'
+import {
+  StyledHomeMain,
+  StyledContainerButton,
+  ContainerBottom,
+} from './styles'
+import { Container } from 'next/app'
+import ContainerButton from '@atoms/container'
 
 const lang = ['Global', 'English', 'Spanish']
 
@@ -32,12 +38,18 @@ const HomeMain: React.FC = () => {
   return (
     <>
       <StyledHomeMain>
-        <Title>Choose your Option</Title>
-        <Text>Who do you want to talk with?</Text>
-        <DropDownButton text="Language" items={lang} icon="folder" />
+        <Title margin="30px 0px 0px 60px">Choose your Option</Title>
+        <Text margin="20px 0px 0px 70px">Who do you want to talk with?</Text>
+        <StyledContainerButton>
+          <DropDownButton text="Language" items={lang} icon="globe" />
+        </StyledContainerButton>
 
-        <div>
-          <h4>Order meal:</h4>
+        <ContainerBottom margin="10px 0px 0px 60px">
+          <h4>
+            <Title margin="0px 0px 10px 100px" size="18">
+              Order meal:
+            </Title>
+          </h4>
           <ButtonGroup>
             {people.map((p, index) => {
               return (
@@ -54,8 +66,10 @@ const HomeMain: React.FC = () => {
               )
             })}
           </ButtonGroup>
-        </div>
-        <Button>Search</Button>
+        </ContainerBottom>
+        <ContainerBottom margin="30px 0px 0px 0px">
+          <Button>Search</Button>
+        </ContainerBottom>
       </StyledHomeMain>
     </>
   )
