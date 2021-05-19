@@ -15,7 +15,6 @@ import QueueCounselor from '../../interfaces/QueueParam/QueueCounselor'
  */
 /* Use it to implement the Matchmaking communication process */
 export default class SocketQueue {
-  /* Socket.io server address */
   private socketIO: Socket
 
   /* Creates and initializes a socket */

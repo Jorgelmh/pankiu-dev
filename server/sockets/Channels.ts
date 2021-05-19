@@ -17,3 +17,6 @@ export const ROOM_ERROR = "Room Error";
 export const CHAT_MESSAGE_CALL = "Chat Message Call";
 export const CHAT_MESSAGE = "Chat Message";
 export const QUEUE_ERROR = "Queue Error";
+export const CHAT_ERROR = "Chat Error";
+export const NEW_MESSAGE = "New Message";
+export const CONNECT_TO_CHATS = "Connect to Chat Rooms";

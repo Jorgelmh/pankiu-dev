@@ -33,8 +33,8 @@ var __awaiter =
     });
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fetchQuotes = exports.changeMood = exports.fetchMessages = exports.fetchChat = void 0;
-const controller = require("../../db/Database");
+exports.acceptFriend = exports.fetchNotifications = exports.addFriends = exports.fetchQuotes = exports.changeMood = exports.fetchMessages = exports.fetchChat = void 0;
+const db = require("../../db/Database");
 const axios_1 = require("axios");
 /**
  *  ==============================
@@ -49,9 +49,9 @@ const fetchChat = (req, res) =>
     let chats;
     try {
       /* Fetch chats from the db */
-      chats = yield controller.getChats(user.id);
+      chats = yield db.getChats(user.id);
     } catch (e) {
-      res.json({
+      return res.json({
         ok: false,
         message: "An error has ocurred when fetching your chats",
       });
@@ -74,9 +74,9 @@ const fetchMessages = (req, res) =>
     let messages;
     try {
       /* Fetch messages from the db */
-      messages = yield controller.getMessages(user.id, otherUserId);
+      messages = yield db.getMessages(user.id, otherUserId);
     } catch (e) {
-      res.json({
+      return res.json({
         ok: false,
         message: "An error has ocurred ",
       });
@@ -97,9 +97,9 @@ const changeMood = (req, res) =>
     const newMood = req.body.mood;
     try {
       /* Change the mood stores in the db */
-      yield controller.changeMood(user.id, newMood);
+      yield db.changeMood(user.id, newMood);
     } catch (e) {
-      res.json({
+      return res.json({
         ok: false,
         message: "An error has ocurred while changing your mood",
       });
@@ -113,13 +113,87 @@ exports.changeMood = changeMood;
 const fetchQuotes = (req, res) =>
   __awaiter(void 0, void 0, void 0, function* () {
     /* Get quotes from the API */
-    const listOfQuotes = (yield axios_1.default.get(
-      "https://type.fit/api/quotes"
-    )).data;
+    let listOfQuotes;
+    /* In case the API is down */
+    try {
+      listOfQuotes = (yield axios_1.default.get("https://type.fit/api/quotes"))
+        .data;
+    } catch (e) {
+      return res.json({
+        ok: false,
+        message: "It seems the quote API is down",
+      });
+    }
     const randomIndex = Math.floor(Math.random() * 1638);
     /* Splice array to get only five random entries */
     const quotes = listOfQuotes.splice(randomIndex, 5);
-    res.json(quotes);
+    res.json({
+      ok: true,
+      quotes,
+    });
   });
 exports.fetchQuotes = fetchQuotes;
+/* Add another person to friends */
+const addFriends = (req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    /* Model user data */
+    const user = req.body.decoded;
+    /* Get other user id */
+    const id = Number(req.body.uid);
+    try {
+      /* Add friend request to the database */
+      yield db.addFriend(user.id, id);
+    } catch (e) {
+      return res.json({
+        ok: false,
+        message: "An error has ocurred while sending a friend request",
+      });
+    }
+    res.json({
+      ok: true,
+    });
+  });
+exports.addFriends = addFriends;
+/* Fetch notifications for the user in session -> Currently only friend requests */
+const fetchNotifications = (req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    /* Model user data */
+    const user = req.body.decoded;
+    let friendRequests;
+    /* Get friend requests */
+    try {
+      friendRequests = yield db.getFriendRequests(user.id);
+    } catch (e) {
+      return res.json({
+        ok: false,
+        message: "An error has ocurred while fetching your friend requests",
+      });
+    }
+    res.json({
+      ok: true,
+      requests: friendRequests,
+    });
+  });
+exports.fetchNotifications = fetchNotifications;
+/* Accept a friend requests from other user */
+const acceptFriend = (req, res) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    /* Model user data */
+    const user = req.body.decoded;
+    /* User ID that sent the friend request to current user in session */
+    const uid = Number(req.body.uid);
+    try {
+      /* Change the state of the friend request in the db */
+      yield db.acceptFriendRequest(user.id, uid);
+    } catch (e) {
+      return res.json({
+        ok: false,
+        message: "An error has occurred while accepting the friend request",
+      });
+    }
+    res.json({
+      ok: true,
+    });
+  });
+exports.acceptFriend = acceptFriend;
 //# sourceMappingURL=ApiController.js.map

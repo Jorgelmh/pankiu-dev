@@ -39,9 +39,10 @@ const http_1 = require("http");
 const socket_io_1 = require("socket.io");
 const MatchMaking_1 = require("./matchmaking/MatchMaking");
 const uuid_1 = require("uuid");
-const AuthToken_1 = require("./middlewares/AuthToken");
 const Channels_1 = require("./sockets/Channels");
 const API_1 = require("./routes/API");
+const sessions_1 = require("./routes/sessions");
+const jwt = require("jsonwebtoken");
 /**
  *  ==========================
  *        SERVER CLASS
@@ -76,7 +77,13 @@ class Server {
      *  ============================
      */
     new API_1.default(this.app);
-    /* Map all requests to the REACT app */
+    /**
+     *  ===============================
+     *     REGISTER THE SESSION API
+     *  ===============================
+     */
+    new sessions_1.default(this.app);
+    /* Map all other requests to the REACT app */
     this.app.get("/*", (req, res) => {
       res.sendFile(path.join(__dirname, "../client/out/index.html"));
     });
@@ -89,30 +96,36 @@ class Server {
       socket.on(Channels_1.QUEUE_USER, (search) =>
         __awaiter(this, void 0, void 0, function* () {
           let person;
-          /* If it's got a param that means this is a patient queue request */
-          if ("param" in search) {
-            /* Decode and model the user search */
-            const user = yield AuthToken_1.decodePatientJWT(search.token);
-            person = {
-              socketid: socket.id,
-              peerid: search.peerid,
-              user,
-              param: search.param,
-              language: search.language,
-            };
-          } else {
-            /* Model user search */
-            const user = yield AuthToken_1.decodeCounselorJWT(search.token);
-            person = {
-              peerid: search.peerid,
-              socketid: socket.id,
-              user,
-              language: search.language,
-            };
-          }
-          /* Add patient to queue and look for a match */
-          const match = this.matchMaking.addPerson(person);
-          if (match) this.communicateMatch(match);
+          jwt.verify(search.token, process.env.secret, (err, decoded) => {
+            /* If there's an error with the session token */
+            if (err) {
+              socket.emit(Channels_1.QUEUE_ERROR, {
+                message: "The token is invalid",
+              });
+            }
+            /* Check whether the user is already in the queue */
+            if (!this.matchMaking.canQueue(decoded.id)) return;
+            /* Check whether it is a patient or a counselor */
+            if ("param" in search) {
+              person = {
+                socketid: socket.id,
+                peerid: search.peerid,
+                user: decoded,
+                param: search.param,
+                language: search.language,
+              };
+            } else {
+              person = {
+                peerid: search.peerid,
+                socketid: socket.id,
+                user: decoded,
+                language: search.language,
+              };
+            }
+            /* Add patient to queue and look for a match */
+            const match = this.matchMaking.addPerson(person);
+            if (match) this.communicateMatch(match);
+          });
         })
       );
       /* Queue guest user with a random identifier as ID */
@@ -158,6 +171,11 @@ class Server {
         console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
         socket.broadcast.emit(Channels_1.USER_CONNECTED, { peerid });
+      });
+      /* Handle a sudden disconnection */
+      socket.on("disconnect", () => {
+        /* Check if the socket belonged to any queue an remove it */
+        this.matchMaking.removePerson(socket.id);
       });
     });
   }

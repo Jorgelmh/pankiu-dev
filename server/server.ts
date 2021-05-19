@@ -23,11 +23,17 @@ import {
   JOINED_CALL,
   ROOM_ERROR,
   QUEUE_ERROR,
+  CHAT_MESSAGE,
+  CHAT_ERROR,
+  NEW_MESSAGE,
+  CONNECT_TO_CHATS,
 } from "./sockets/Channels";
 import PatientSearch from "./interfaces/search/PatientSearch";
 import API from "./routes/API";
 import Session from "./routes/sessions";
 import * as jwt from "jsonwebtoken";
+import { recordMessage } from "./db/Database";
+import SendMessage from "./interfaces/chats/SendMessage";
 
 /**
  *  ==========================
@@ -41,6 +47,7 @@ export default class Server {
   private io: SocketIOServer;
   private matchMaking: MatchMaking;
   private rooms: SocketRoom;
+  private chatSockets: { [id: number]: string[] };
   private readonly port = parseInt(process.env.PORT || "3000");
 
   constructor() {
@@ -180,10 +187,79 @@ export default class Server {
         socket.broadcast.emit(USER_CONNECTED, { peerid });
       });
 
+      /* Connect to chat rooms */
+      socket.on(CONNECT_TO_CHATS, ({ token }) => {
+        /* Decode and verify token */
+        jwt.verify(
+          token,
+          process.env.secret,
+          (err: any, decoded: Patient | Counselor) => {
+            if (err) {
+              socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
+              return;
+            }
+
+            if (!this.chatSockets[decoded.id])
+              this.chatSockets[decoded.id] = [];
+
+            this.chatSockets[decoded.id].push(socket.id);
+          }
+        );
+      });
+
+      /* Sent a message */
+      socket.on(CHAT_MESSAGE, async (req: SendMessage) => {
+        /* Verify token */
+        jwt.verify(
+          req.token,
+          process.env.secret,
+          async (err, decoded: Patient | Counselor) => {
+            if (err) {
+              socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
+              return;
+            }
+            /* Store message in the db */
+            try {
+              await recordMessage(decoded.id, req.receiver_id, req.message);
+            } catch (e) {
+              socket.emit(CHAT_ERROR, {
+                ok: false,
+                message: "Error recording the message in the db",
+              });
+              return;
+            }
+
+            socket
+              .to([
+                ...this.chatSockets[decoded.id],
+                ...this.chatSockets[req.receiver_id],
+              ])
+              .emit(NEW_MESSAGE, {
+                sender_id: decoded.id,
+                message: req.message,
+              });
+          }
+        );
+      });
+
       /* Handle a sudden disconnection */
       socket.on("disconnect", () => {
         /* Check if the socket belonged to any queue an remove it */
         this.matchMaking.removePerson(socket.id);
+
+        /* Remove it from the chat sockets */
+        const userid = Object.keys(this.chatSockets).find((key: string) =>
+          this.chatSockets[Number(key)].find(
+            (socketid: string) => socketid === socket.id
+          )
+        );
+
+        if (userid) {
+          const index = this.chatSockets[Number(userid)].findIndex(
+            (socketid: string) => socketid === socket.id
+          );
+          this.chatSockets[Number(userid)].splice(index, 1);
+        }
       });
     });
   }

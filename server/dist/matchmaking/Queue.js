@@ -32,6 +32,13 @@ class Queue {
     }
     return false;
   }
+  /* Check if the userId is not already in the queue */
+  canQueue(id) {
+    /* Find user id in the queue */
+    const index = this.collection.findIndex((entry) => entry.user.id === id);
+    if (index >= 0) return false;
+    return true;
+  }
   /* Return the size of the queue */
   size() {
     return this.collection.length;
