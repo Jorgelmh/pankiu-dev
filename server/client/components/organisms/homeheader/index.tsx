@@ -3,6 +3,7 @@ import Title from '@atoms/title'
 import Text from '@atoms/text'
 import Motivation from '@molecules/motivation'
 import Container from '@atoms/container'
+import Star from '@atoms/svg/star'
 
 const HomeHeader: React.FC = () => {
   return (

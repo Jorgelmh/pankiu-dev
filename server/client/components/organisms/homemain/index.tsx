@@ -12,6 +12,7 @@ import {
   StyledHomeMain,
   StyledContainerButton,
   ContainerBottom,
+  StyledButton,
 } from './styles'
 import { Container } from 'next/app'
 import ContainerButton from '@atoms/container'
@@ -44,9 +45,9 @@ const HomeMain: React.FC = () => {
           <DropDownButton text="Language" items={lang} icon="globe" />
         </StyledContainerButton>
 
-        <ContainerBottom margin="10px 0px 0px 60px">
+        <ContainerBottom>
           <h4>
-            <Title margin="0px 0px 10px 100px" size="18">
+            <Title margin="10px 0px 10px 0px" size="18">
               Order meal:
             </Title>
           </h4>
@@ -54,21 +55,23 @@ const HomeMain: React.FC = () => {
             {people.map((p, index) => {
               return (
                 <div key={index}>
-                  <Button
-                    togglable={true}
-                    selected={person.name === p.name}
-                    onClick={handleClick.bind(undefined, p.name)}
-                  >
-                    <span>{p.icon}</span>
-                    {p.name}
-                  </Button>
+                  <ContainerBottom margin="0px 20px 0px 0px">
+                    <Button
+                      togglable={true}
+                      selected={person.name === p.name}
+                      onClick={handleClick.bind(undefined, p.name)}
+                    >
+                      <span>{p.icon}</span>
+                      {p.name}
+                    </Button>
+                  </ContainerBottom>
                 </div>
               )
             })}
           </ButtonGroup>
         </ContainerBottom>
-        <ContainerBottom margin="30px 0px 0px 0px">
-          <Button>Search</Button>
+        <ContainerBottom margin="20px 0px 0px 0px">
+          <StyledButton>Search</StyledButton>
         </ContainerBottom>
       </StyledHomeMain>
     </>
