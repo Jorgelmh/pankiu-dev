@@ -9,5 +9,5 @@ process.env.dbhost = "localhost";
 process.env.dbuser = "root";
 process.env.dbpassword = "root";
 process.env.dbport = "3306";
-process.env.dbname = "telerik-hackathon";
+process.env.dbname = "hackathon";
 //# sourceMappingURL=config.js.map

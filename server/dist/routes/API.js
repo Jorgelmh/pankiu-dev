@@ -27,13 +27,31 @@ class API {
       ApiController_1.fetchMessages
     );
     /* Change the mood of a patient on the database */
-    this.app.post(
+    this.app.put(
       "/api/changemood",
       AuthToken_1.AuthToken,
       ApiController_1.changeMood
     );
     /* Return random motivaltional phrase */
     this.app.get("/api/quotes", ApiController_1.fetchQuotes);
+    /* Add friends */
+    this.app.post(
+      "/api/addfriends",
+      AuthToken_1.AuthToken,
+      ApiController_1.addFriends
+    );
+    /* Fetch notifications */
+    this.app.get(
+      "/api/notification",
+      AuthToken_1.AuthToken,
+      ApiController_1.fetchNotifications
+    );
+    /* Accept a friend request */
+    this.app.put(
+      "/api/acceptfriend",
+      AuthToken_1.AuthToken,
+      ApiController_1.acceptFriend
+    );
   }
 }
 exports.default = API;

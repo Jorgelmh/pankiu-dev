@@ -72,13 +72,13 @@ exports.decodeCounselorJWT = decodeCounselorJWT;
  */
 const AuthToken = (req, res, next) => {
   /* Get token from headers */
-  const token = process.env.secret;
+  const token = String(req.headers.token);
   /* Check whether a token has been sent along with the request */
   if (token) {
     jwt.verify(token, process.env.secret, (err, decoded) => {
       /* If the token expired or not valid anymore redirect to login */
       if (err) {
-        res.send(200).send({
+        res.json({
           ok: false,
           redirect: "/login",
         });
@@ -89,7 +89,7 @@ const AuthToken = (req, res, next) => {
     });
   } else {
     /* In case no token has been sent to this request */
-    res.send(200).send({
+    res.json({
       ok: false,
       redirect: "/login",
     });

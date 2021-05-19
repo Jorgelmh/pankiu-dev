@@ -44,7 +44,7 @@ export const AuthToken = (
   next: express.NextFunction
 ) => {
   /* Get token from headers */
-  const token = process.env.secret;
+  const token = String(req.headers.token);
 
   /* Check whether a token has been sent along with the request */
   if (token) {

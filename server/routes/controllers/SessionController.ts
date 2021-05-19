@@ -18,7 +18,7 @@ export const register = async (req: express.Request, res: express.Response) => {
   const username: string = req.body.username;
   const email: string = req.body.email;
 
-  /* Error message in case  */
+  /* Error message in case there's a problem or id if everything works fine */
   let response;
 
   /* Register new patient on the db */
@@ -121,13 +121,13 @@ export const login = async (req: express.Request, res: express.Response) => {
         token,
       });
     });
+  } else {
+    /* Invalid credentials because no payload was returned from authentication */
+    return res.json({
+      ok: false,
+      message: "Invalid Credentials",
+    });
   }
-
-  /* Invalid credentials because no payload was returned from authentication */
-  return res.json({
-    ok: false,
-    message: "Invalid Credentials",
-  });
 };
 
 /* Update user's details in the db */

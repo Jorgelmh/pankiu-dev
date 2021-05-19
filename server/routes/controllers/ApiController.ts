@@ -192,7 +192,7 @@ export const acceptFriend = async (
     /* Change the state of the friend request in the db */
     await db.acceptFriendRequest(user.id, uid);
   } catch (e) {
-    return res.json({
+    res.json({
       ok: false,
       message: "An error has occurred while accepting the friend request",
     });
