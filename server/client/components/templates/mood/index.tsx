@@ -1,5 +1,11 @@
+import { MoodSelect } from '@templates/mood/styles'
+
 const App: React.FC = () => {
-  return <></>
+  return (
+    <>
+      <MoodSelect></MoodSelect>
+    </>
+  )
 }
 
 export default App

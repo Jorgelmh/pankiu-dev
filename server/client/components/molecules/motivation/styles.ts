@@ -9,5 +9,5 @@ export const StyledContainer = styled(Container)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 30px 0px 0px 20px;
+  margin-top: 30px;
 `

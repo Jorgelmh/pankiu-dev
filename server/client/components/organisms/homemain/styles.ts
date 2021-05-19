@@ -23,4 +23,5 @@ export const StyledButton = styled(Button)`
   width: 100%;
   align-items: flex-end;
   margin-top: 30px;
+  margin-bottom: 30px;
 `

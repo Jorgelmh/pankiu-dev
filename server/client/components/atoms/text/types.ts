@@ -3,4 +3,7 @@ export default interface Textprops {
   color?: string
   fontFamily?: string
   margin?: string
+  display?: string
+  alignText?: string
+  justifyContent?: string
 }

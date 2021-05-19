@@ -3,4 +3,7 @@ export default interface TitleProps {
   color?: string
   fontFamily?: string
   margin?: string
+  display?: string
+  alignText?: string
+  justifyContent?: string
 }

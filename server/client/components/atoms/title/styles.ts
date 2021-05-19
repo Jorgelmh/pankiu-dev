@@ -6,5 +6,7 @@ export const StyledTitle = styled.h1<TitleProps>`
   color: ${({ color = '#000000' }) => color};
   font-family ${({ fontFamily = 'Poppins' }) => fontFamily};
   margin ${({ margin = '0' }) => margin}; 
-  
+  display ${({ display = '' }) => display};
+  align-text ${({ alignText = '' }) => alignText};
+  justify-content ${({ justifyContent = '' }) => justifyContent};
 `

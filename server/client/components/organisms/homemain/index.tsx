@@ -39,8 +39,22 @@ const HomeMain: React.FC = () => {
   return (
     <>
       <StyledHomeMain>
-        <Title margin="30px 0px 0px 60px">Choose your Option</Title>
-        <Text margin="20px 0px 0px 70px">Who do you want to talk with?</Text>
+        <Title
+          display="flex"
+          alignText="center"
+          justifyContent="center"
+          margin="20px 0px 0px 0px"
+        >
+          Choose your Option
+        </Title>
+        <Text
+          display="flex"
+          alignText="center"
+          justifyContent="center"
+          margin="20px 0px 0px 0px"
+        >
+          Who do you want to talk with?
+        </Text>
         <StyledContainerButton>
           <DropDownButton text="Language" items={lang} icon="globe" />
         </StyledContainerButton>

@@ -3,19 +3,24 @@ import Title from '@atoms/title'
 import Text from '@atoms/text'
 import Motivation from '@molecules/motivation'
 import Container from '@atoms/container'
-import Star from '@atoms/svg/star'
 
 const HomeHeader: React.FC = () => {
   return (
     <>
       <Header>
-        <Container p="20px 0px 0px 20px">
-          <Title color="#ECECFC">Hi User,</Title>
-          <Text color="#ECECFC" margin="15px 0px 0px 0px">
-            Need some help today?
-          </Text>
+        <Container
+          display="flex"
+          align="center"
+          justify="center"
+          direction="column"
+        >
+          <Title color="#ECECFC" display="flex">
+            Hi User,
+          </Title>
+          <br />
+          <Text color="#ECECFC">Need some help today?</Text>
+          <Motivation />
         </Container>
-        <Motivation />
       </Header>
     </>
   )
