@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Container from '@atoms/container'
 
 export const StyledContainer = styled(Container)`
-  width: 414px;
+  width: 100%;
   height: 100px;
   position: fixed;
   bottom: 0;

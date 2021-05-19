@@ -1,12 +1,15 @@
 import GlobalStyles from '@styles/global'
 import '@styles/theme/hackaton.css'
 import { AppProps } from 'next/app'
+import Layout from '@templates/layout'
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   return (
     <>
-      <GlobalStyles />
-      <Component {...pageProps} />
+      <Layout>
+        <GlobalStyles />
+        <Component {...pageProps} />
+      </Layout>
     </>
   )
 }
