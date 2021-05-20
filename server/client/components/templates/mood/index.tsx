@@ -1,9 +1,9 @@
-import { MoodSelect } from '@templates/mood/styles'
+import MoodLayout from '@components/organisms/mood'
 
 const App: React.FC = () => {
   return (
     <>
-      <MoodSelect></MoodSelect>
+      <MoodLayout />
     </>
   )
 }
