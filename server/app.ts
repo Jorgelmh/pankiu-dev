@@ -1,8 +1,11 @@
-import Server from './Server'
+import Server from "./Server";
+
+/* Load configs */
+require("./config/config");
 
 /* Create server instance */
-const server = new Server()
+const server = new Server();
 
 server.listen((port: number) => {
-    console.log(`Server running on port: ${port}`)
-})
+  console.log(`Server running on port: ${port}`);
+});

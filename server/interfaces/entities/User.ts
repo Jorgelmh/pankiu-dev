@@ -5,7 +5,7 @@
  */
 /* Database id */
 export default interface User {
-  id: number | string;
+  id: number;
   username: string;
   email: string;
   isAdmin: boolean;
