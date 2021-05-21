@@ -43,6 +43,7 @@ const Channels_1 = require("./sockets/Channels");
 const API_1 = require("./routes/API");
 const sessions_1 = require("./routes/sessions");
 const jwt = require("jsonwebtoken");
+const Database_1 = require("./db/Database");
 /**
  *  ==========================
  *        SERVER CLASS
@@ -70,7 +71,9 @@ class Server {
   /* Handle all routes of the sever: Further route objects will be added on the way */
   registerRoutes() {
     /* Serve the static files of the Front-End application */
-    this.app.use(express.static(path.join(__dirname, "../client/out")));
+    this.app.use(
+      express.static(path.join(__dirname, "..", "..", "client/build"))
+    );
     /**
      *  ============================
      *      REGISTER THE REST API
@@ -85,7 +88,7 @@ class Server {
     new sessions_1.default(this.app);
     /* Map all other requests to the REACT app */
     this.app.get("/*", (req, res) => {
-      res.sendFile(path.join(__dirname, "../client/out/index.html"));
+      res.sendFile(path.join(__dirname, "..", "..", "client/build/index.html"));
     });
   }
   /* Register message passing channels */
@@ -172,10 +175,77 @@ class Server {
         /* Contact other sockets connected */
         socket.broadcast.emit(Channels_1.USER_CONNECTED, { peerid });
       });
+      /* Connect to chat rooms */
+      socket.on(Channels_1.CONNECT_TO_CHATS, ({ token }) => {
+        /* Decode and verify token */
+        jwt.verify(token, process.env.secret, (err, decoded) => {
+          if (err) {
+            socket.emit(Channels_1.CHAT_ERROR, {
+              ok: false,
+              message: "Invalid token",
+            });
+            return;
+          }
+          if (!this.chatSockets[decoded.id]) this.chatSockets[decoded.id] = [];
+          this.chatSockets[decoded.id].push(socket.id);
+        });
+      });
+      /* Sent a message */
+      socket.on(Channels_1.CHAT_MESSAGE, (req) =>
+        __awaiter(this, void 0, void 0, function* () {
+          /* Verify token */
+          jwt.verify(req.token, process.env.secret, (err, decoded) =>
+            __awaiter(this, void 0, void 0, function* () {
+              if (err) {
+                socket.emit(Channels_1.CHAT_ERROR, {
+                  ok: false,
+                  message: "Invalid token",
+                });
+                return;
+              }
+              /* Store message in the db */
+              try {
+                yield Database_1.recordMessage(
+                  decoded.id,
+                  req.receiver_id,
+                  req.message
+                );
+              } catch (e) {
+                socket.emit(Channels_1.CHAT_ERROR, {
+                  ok: false,
+                  message: "Error recording the message in the db",
+                });
+                return;
+              }
+              socket
+                .to([
+                  ...this.chatSockets[decoded.id],
+                  ...this.chatSockets[req.receiver_id],
+                ])
+                .emit(Channels_1.NEW_MESSAGE, {
+                  sender_id: decoded.id,
+                  message: req.message,
+                });
+            })
+          );
+        })
+      );
       /* Handle a sudden disconnection */
       socket.on("disconnect", () => {
         /* Check if the socket belonged to any queue an remove it */
         this.matchMaking.removePerson(socket.id);
+        /* Remove it from the chat sockets */
+        const userid = Object.keys(this.chatSockets).find((key) =>
+          this.chatSockets[Number(key)].find(
+            (socketid) => socketid === socket.id
+          )
+        );
+        if (userid) {
+          const index = this.chatSockets[Number(userid)].findIndex(
+            (socketid) => socketid === socket.id
+          );
+          this.chatSockets[Number(userid)].splice(index, 1);
+        }
       });
     });
   }

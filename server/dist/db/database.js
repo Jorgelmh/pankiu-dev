@@ -33,7 +33,7 @@ var __awaiter =
     });
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateEmail = exports.updatePassword = exports.updateUsername = exports.authenticateUser = exports.registerCounselor = exports.registerPatient = exports.acceptFriendRequest = exports.getFriendRequests = exports.addFriend = exports.changeMood = exports.getMessages = exports.getChats = exports.getConnection = void 0;
+exports.recordMessage = exports.updateEmail = exports.updatePassword = exports.updateUsername = exports.authenticateUser = exports.registerCounselor = exports.registerPatient = exports.acceptFriendRequest = exports.getFriendRequests = exports.addFriend = exports.changeMood = exports.getMessages = exports.getChats = exports.getConnection = void 0;
 const mysql = require("mysql2/promise");
 const bcrypt = require("bcrypt");
 /**
@@ -96,7 +96,7 @@ const getMessages = (id, otherId) =>
     const conn = yield exports.getConnection();
     const rows = (yield conn.execute(
       `SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND 
-        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=?`,
+        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=? ORDER BY date`,
       [id, otherId, otherId, id]
     ))[0];
     const messages = [];
@@ -169,7 +169,7 @@ const getFriendRequests = (id) =>
     const conn = yield exports.getConnection();
     const rows = (yield conn.execute(
       `SELECT friends.sender_id, users.username FROM 
-  friends, users WHERE friends.receiver_id=? AND friends.accepted=? AND users.id=friends.sender_id ORDER BY date`,
+  friends, users WHERE friends.receiver_id=? AND friends.accepted=? AND users.id=friends.sender_id ORDER BY friends.date`,
       [id, 0]
     ))[0];
     const requests = [];
@@ -430,4 +430,29 @@ const updateEmail = (id, email) =>
     conn.end();
   });
 exports.updateEmail = updateEmail;
+/**
+ *  ==============================
+ *          RECORD MESSAGE
+ *  ==============================
+ *
+ *  @param sender_id {number} - Id of the user that sends the message
+ *  @param receiver_id {number} - Id of the user that receives the message
+ */
+const recordMessage = (sender_id, receiver_id, message) =>
+  __awaiter(void 0, void 0, void 0, function* () {
+    /* Get a connection */
+    const conn = yield exports.getConnection();
+    /* Record the message in the db */
+    yield conn.execute(
+      `INSERT INTO messages (time, message, receiver_id, sender_id) VALUES (?, ?, ?, ?)`,
+      [
+        new Date().toISOString().slice(0, 19).replace("T", " "),
+        message,
+        receiver_id,
+        sender_id,
+      ]
+    );
+    conn.end();
+  });
+exports.recordMessage = recordMessage;
 //# sourceMappingURL=Database.js.map

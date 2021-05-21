@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.QUEUE_ERROR = exports.CHAT_MESSAGE = exports.CHAT_MESSAGE_CALL = exports.ROOM_ERROR = exports.JOINED_CALL = exports.USER_CONNECTED = exports.SET_UP_CALL = exports.QUEUE_GUEST = exports.ENTER_ROOM = exports.GET_ROOM_DETAILS = exports.ROOM_FOUND = exports.CONNECT_TO_ROOM = exports.QUEUE_USER = void 0;
+exports.CONNECT_TO_CHATS = exports.NEW_MESSAGE = exports.CHAT_ERROR = exports.QUEUE_ERROR = exports.CHAT_MESSAGE = exports.CHAT_MESSAGE_CALL = exports.ROOM_ERROR = exports.JOINED_CALL = exports.USER_CONNECTED = exports.SET_UP_CALL = exports.QUEUE_GUEST = exports.ENTER_ROOM = exports.GET_ROOM_DETAILS = exports.ROOM_FOUND = exports.CONNECT_TO_ROOM = exports.QUEUE_USER = void 0;
 /**
  *  ============================
  *      SOCKET CHANNEL NAMES
@@ -20,4 +20,7 @@ exports.ROOM_ERROR = "Room Error";
 exports.CHAT_MESSAGE_CALL = "Chat Message Call";
 exports.CHAT_MESSAGE = "Chat Message";
 exports.QUEUE_ERROR = "Queue Error";
+exports.CHAT_ERROR = "Chat Error";
+exports.NEW_MESSAGE = "New Message";
+exports.CONNECT_TO_CHATS = "Connect to Chat Rooms";
 //# sourceMappingURL=Channels.js.map
