@@ -8,7 +8,7 @@ exports.Language = void 0;
  */
 var Language;
 (function (Language) {
-  Language[(Language["Spanish"] = 0)] = "Spanish";
-  Language[(Language["English"] = 1)] = "English";
-})((Language = exports.Language || (exports.Language = {})));
+    Language[Language["Spanish"] = 0] = "Spanish";
+    Language[Language["English"] = 1] = "English";
+})(Language = exports.Language || (exports.Language = {}));
 //# sourceMappingURL=Language.js.map

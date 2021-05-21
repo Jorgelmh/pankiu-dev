@@ -1,7 +1,7 @@
 import Server from "./Server";
 
 /* Load configs */
-require("./config/config");
+require("./config/remote");
 
 /* Create server instance */
 const server = new Server();

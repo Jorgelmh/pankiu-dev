@@ -1,6 +1,16 @@
-import Title from "components/atoms/title";
-import { Button } from "@progress/kendo-react-buttons";
-import { ButtonDisplay, HeaderProfile } from "./styles";
+import Title from 'components/atoms/title'
+import { Button } from '@progress/kendo-react-buttons'
+import {
+  ButtonDisplay,
+  Form,
+  HeaderProfile,
+  ImgContainer,
+  Styledinput,
+  FormContainer,
+  ButtonContainer,
+  EditProfileContainer,
+  EditProfile,
+} from './styles'
 
 const Profile: React.FC = () => {
   return (
@@ -18,10 +28,51 @@ const Profile: React.FC = () => {
         >
           Your Profile
         </Title>
-        <img src="img\user 1.svg"></img>
+        <ImgContainer>
+          <img
+            src="img\user 1.svg"
+            alt=""
+            style={{
+              display: 'flex',
+              margin: '5px auto',
+              height: '60px',
+              width: '60px',
+            }}
+          />
+        </ImgContainer>
+        <ButtonContainer>
+          <Button>Change Profile Picture</Button>
+        </ButtonContainer>
       </HeaderProfile>
+      <br />
+      <FormContainer>
+        <Form>
+          <Title margin="5px auto" size="14px">
+            Your name
+          </Title>
+          <Styledinput />
+          <Title margin="5px auto" size="14px">
+            Username
+          </Title>
+          <Styledinput />
+          <Title margin="5px auto" size="14px">
+            Email
+          </Title>
+          <Styledinput />
+          <Title margin="5px auto" size="14px">
+            Password
+          </Title>
+          <Styledinput />
+          <br />
+        </Form>
+      </FormContainer>
+      <EditProfile>
+        <Button>
+          <EditProfileContainer>Edit Profile</EditProfileContainer>
+        </Button>
+      </EditProfile>
     </>
-  );
-};
+  )
+}
 
-export default Profile;
+export default Profile
