@@ -73,7 +73,9 @@ export default class Server {
   /* Handle all routes of the sever: Further route objects will be added on the way */
   private registerRoutes(): void {
     /* Serve the static files of the Front-End application */
-    this.app.use(express.static(path.join(__dirname, "../client/out")));
+    this.app.use(
+      express.static(path.join(__dirname, "..", "..", "client/build"))
+    );
 
     /**
      *  ============================
@@ -91,7 +93,7 @@ export default class Server {
 
     /* Map all other requests to the REACT app */
     this.app.get("/*", (req, res) => {
-      res.sendFile(path.join(__dirname, "../client/out/index.html"));
+      res.sendFile(path.join(__dirname, "..", "..", "client/build/index.html"));
     });
   }
 
@@ -103,42 +105,38 @@ export default class Server {
       /* Patient queuing for matchmaking -> Uses token to get users data */
       socket.on(QUEUE_USER, async (search: QueuePatient | QueueCounselor) => {
         let person: PersonSearch;
-        jwt.verify(
-          search.token,
-          process.env.secret,
-          (err, decoded: Patient | Counselor) => {
-            /* If there's an error with the session token */
-            if (err) {
-              socket.emit(QUEUE_ERROR, { message: "The token is invalid" });
-            }
-
-            /* Check whether the user is already in the queue */
-            if (!this.matchMaking.canQueue(decoded.id)) return;
-
-            /* Check whether it is a patient or a counselor */
-            if ("param" in search) {
-              person = {
-                socketid: socket.id,
-                peerid: search.peerid,
-                user: <Patient>decoded,
-                param: search.param,
-                language: search.language,
-              };
-            } else {
-              person = {
-                peerid: search.peerid,
-                socketid: socket.id,
-                user: <Counselor>decoded,
-                language: search.language,
-              };
-            }
-
-            /* Add patient to queue and look for a match */
-            const match = this.matchMaking.addPerson(person);
-
-            if (match) this.communicateMatch(match);
+        jwt.verify(search.token, process.env.secret, (err, decoded: any) => {
+          /* If there's an error with the session token */
+          if (err) {
+            socket.emit(QUEUE_ERROR, { message: "The token is invalid" });
           }
-        );
+
+          /* Check whether the user is already in the queue */
+          if (!this.matchMaking.canQueue(decoded.id)) return;
+
+          /* Check whether it is a patient or a counselor */
+          if ("param" in search) {
+            person = {
+              socketid: socket.id,
+              peerid: search.peerid,
+              user: <Patient>decoded,
+              param: search.param,
+              language: search.language,
+            };
+          } else {
+            person = {
+              peerid: search.peerid,
+              socketid: socket.id,
+              user: <Counselor>decoded,
+              language: search.language,
+            };
+          }
+
+          /* Add patient to queue and look for a match */
+          const match = this.matchMaking.addPerson(person);
+
+          if (match) this.communicateMatch(match);
+        });
       });
 
       /* Queue guest user with a random identifier as ID */
@@ -190,56 +188,47 @@ export default class Server {
       /* Connect to chat rooms */
       socket.on(CONNECT_TO_CHATS, ({ token }) => {
         /* Decode and verify token */
-        jwt.verify(
-          token,
-          process.env.secret,
-          (err: any, decoded: Patient | Counselor) => {
-            if (err) {
-              socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
-              return;
-            }
-
-            if (!this.chatSockets[decoded.id])
-              this.chatSockets[decoded.id] = [];
-
-            this.chatSockets[decoded.id].push(socket.id);
+        jwt.verify(token, process.env.secret, (err: any, decoded: any) => {
+          if (err) {
+            socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
+            return;
           }
-        );
+
+          if (!this.chatSockets[decoded.id]) this.chatSockets[decoded.id] = [];
+
+          this.chatSockets[decoded.id].push(socket.id);
+        });
       });
 
       /* Sent a message */
       socket.on(CHAT_MESSAGE, async (req: SendMessage) => {
         /* Verify token */
-        jwt.verify(
-          req.token,
-          process.env.secret,
-          async (err, decoded: Patient | Counselor) => {
-            if (err) {
-              socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
-              return;
-            }
-            /* Store message in the db */
-            try {
-              await recordMessage(decoded.id, req.receiver_id, req.message);
-            } catch (e) {
-              socket.emit(CHAT_ERROR, {
-                ok: false,
-                message: "Error recording the message in the db",
-              });
-              return;
-            }
-
-            socket
-              .to([
-                ...this.chatSockets[decoded.id],
-                ...this.chatSockets[req.receiver_id],
-              ])
-              .emit(NEW_MESSAGE, {
-                sender_id: decoded.id,
-                message: req.message,
-              });
+        jwt.verify(req.token, process.env.secret, async (err, decoded: any) => {
+          if (err) {
+            socket.emit(CHAT_ERROR, { ok: false, message: "Invalid token" });
+            return;
           }
-        );
+          /* Store message in the db */
+          try {
+            await recordMessage(decoded.id, req.receiver_id, req.message);
+          } catch (e) {
+            socket.emit(CHAT_ERROR, {
+              ok: false,
+              message: "Error recording the message in the db",
+            });
+            return;
+          }
+
+          socket
+            .to([
+              ...this.chatSockets[decoded.id],
+              ...this.chatSockets[req.receiver_id],
+            ])
+            .emit(NEW_MESSAGE, {
+              sender_id: decoded.id,
+              message: req.message,
+            });
+        });
       });
 
       /* Handle a sudden disconnection */
