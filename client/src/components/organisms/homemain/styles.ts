@@ -9,7 +9,7 @@ export const StyledContainerButton = styled(Container)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 40px;
 `;
 export const ContainerBottom = styled(Container)<any>`
 display:flex;

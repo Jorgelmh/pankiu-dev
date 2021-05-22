@@ -9,5 +9,4 @@ export const StyledText = styled.p<Textprops>`
   display ${({ display = "" }) => display}; 
   align-text ${({ alignText = "" }) => alignText};
   justify-content ${({ justifyContent = "" }) => justifyContent};
-
 `;

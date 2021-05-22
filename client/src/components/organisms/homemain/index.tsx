@@ -42,7 +42,7 @@ const HomeMain: React.FC = () => {
           display="flex"
           alignText="center"
           justifyContent="center"
-          margin="20px 0px 0px 0px"
+          margin="80px 0px 0px 0px"
         >
           Choose your Option
         </Title>
@@ -50,7 +50,7 @@ const HomeMain: React.FC = () => {
           display="flex"
           alignText="center"
           justifyContent="center"
-          margin="20px 0px 0px 0px"
+          margin="40px 0px 0px 0px"
         >
           Who do you want to talk with?
         </Text>
@@ -60,7 +60,7 @@ const HomeMain: React.FC = () => {
 
         <ContainerBottom>
           <h4>
-            <Title margin="10px 0px 10px 0px" size="18">
+            <Title margin="40px 0px 10px 0px" size="18">
               Order meal:
             </Title>
           </h4>
@@ -68,7 +68,7 @@ const HomeMain: React.FC = () => {
             {people.map((p, index) => {
               return (
                 <div key={index}>
-                  <ContainerBottom margin="0px 20px 0px 0px">
+                  <ContainerBottom margin="30px 20px 0px 0px">
                     <Button
                       togglable={true}
                       selected={person.name === p.name}
@@ -83,7 +83,7 @@ const HomeMain: React.FC = () => {
             })}
           </ButtonGroup>
         </ContainerBottom>
-        <ContainerBottom margin="20px 0px 0px 0px">
+        <ContainerBottom margin="40px 0px 0px 0px">
           <StyledButton>Search</StyledButton>
         </ContainerBottom>
       </StyledHomeMain>

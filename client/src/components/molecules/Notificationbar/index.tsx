@@ -7,7 +7,7 @@ const NotificationContainer: React.FC = () => {
     <>
 
 <NotificationCon>
-<BadgeContainer style={{display:'flex',justifyContent:'center',width:'100%',paddingTop:'1rem'}}>
+<BadgeContainer style={{display:'flex',justifyContent:'center',width:'100%',paddingTop:'0.9rem'}}>
   <TextCon>
   Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
   </TextCon>
