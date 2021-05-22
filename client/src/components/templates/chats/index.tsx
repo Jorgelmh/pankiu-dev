@@ -1,5 +1,9 @@
+import Chatspage from "components/organisms/chats"
+
 const App: React.FC = () => {
-  return <>chats</>;
+  return <>
+  <Chatspage/>
+   </>;
 };
 
 export default App;
