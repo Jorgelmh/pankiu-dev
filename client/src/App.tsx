@@ -7,6 +7,8 @@ import Signup from "components/templates/signup";
 import "./styles/theme/hackaton.css";
 import GlobalStyles from "./styles/global";
 import Profile from "components/templates/profile"
+import Mood from "components/templates/mood"
+import Notification from "components/templates/notification"
 
 function App() {
   return (
@@ -21,6 +23,12 @@ function App() {
         </Route>
         <Route exact path="/profile">
           <Profile />
+        </Route>
+        <Route exact path="/mood">
+          <Mood/>
+        </Route>
+        <Route exact path="/notification">
+          <Notification/>
         </Route>
       </Switch>
     </Router>
