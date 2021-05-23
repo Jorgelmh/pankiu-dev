@@ -15,6 +15,7 @@ import { Mood } from '../../../interfaces/entities/Patient'
 
 import { Error, Label,Hint } from "@progress/kendo-react-labels";
 import { Input } from "@progress/kendo-react-inputs";
+import { Borderbottom, SubmitCont } from "../signup2/styles";
 
 const dataCounselor = [
   { label: "Yes", value: true },
@@ -142,10 +143,10 @@ const SignUpForm = () => {
     
   <StyledContainer>
     <Container>
-
     <Button onClick={() => setForm('patient')}>
       Patient
     </Button>
+    
     <Button onClick={() => setForm('counselor')}>
       Counselor
     </Button>
@@ -155,7 +156,7 @@ const SignUpForm = () => {
       <Form
       onSubmit={handleSubmit}
       render={(formRenderProps) => (
-        <FormElement style={{display:'flex', justifyContent:'center', width:'100%',flexDirection:'column', margin:'6rem 0px 3rem 0px'}}>
+        <FormElement>
           <fieldset className={"k-form-fieldset"}>
             <legend className={"k-form-legend"}>
             Sign Up
@@ -164,6 +165,7 @@ const SignUpForm = () => {
               <Label editorId='username'>
                 User name
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -175,6 +177,7 @@ const SignUpForm = () => {
                 required={true}
                 minLength={5}
               />
+              </Borderbottom>
 
             </div>
 
@@ -182,6 +185,7 @@ const SignUpForm = () => {
               <Label editorId='email'>
                 Email
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -192,12 +196,14 @@ const SignUpForm = () => {
                 id='email'
                 validator={emailValidator}
               />
+              </Borderbottom>
             </div>
 
             <div className="mb-3">
               <Label editorId='password'>
                 Password
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -208,11 +214,12 @@ const SignUpForm = () => {
                 minLength={8}
                 required={true}
               />
+              </Borderbottom>
               <Field
               id={"mood"}
               name={"mood"}
               label={"How are you feeling?"}
-              hint={"Hint: Choose a your mood"}
+              hint={"Hint: Choose your mood"}
               component={FormRadioGroup}
               data={mood}
               layout={"horizontal"}
@@ -220,6 +227,7 @@ const SignUpForm = () => {
             />
             </div>
           </fieldset>
+          <SubmitCont>
           <div className="k-form-buttons">
             <button
               type={"submit"}
@@ -229,7 +237,7 @@ const SignUpForm = () => {
               Submit
             </button>
           </div>
-          
+          </SubmitCont>
         </FormElement>
       )}
     />
@@ -238,7 +246,8 @@ const SignUpForm = () => {
       <Form
       onSubmit={handleSubmit}
       render={(formRenderProps) => (
-        <FormElement >
+        <FormElement>
+          <StyledContainer>
           <fieldset className={"k-form-fieldset"}>
             <legend className={"k-form-legend"}>
             Sign Up
@@ -247,6 +256,7 @@ const SignUpForm = () => {
               <Label editorId='username'>
                 User name
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -258,12 +268,14 @@ const SignUpForm = () => {
                 required={true}
                 minLength={5}
               />
+              </Borderbottom>
             </div>
 
             <div className="mb-3">
               <Label editorId='email'>
                 Email
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -274,12 +286,14 @@ const SignUpForm = () => {
                 id='email'
                 validator={emailValidator}
               />
+              </Borderbottom>
             </div>
 
             <div className="mb-3">
               <Label editorId='password'>
                 Password
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -290,9 +304,11 @@ const SignUpForm = () => {
                 minLength={8}
                 required={true}
               />
+              </Borderbottom>
               <Label editorId='university'>
                 University
               </Label>
+              <Borderbottom>
               <Field
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setValues({ ...values, [e.target.name]: e.target.value })
@@ -302,6 +318,8 @@ const SignUpForm = () => {
                 id='university'
                 required={true}
               />
+              </Borderbottom>
+              <Borderbottom>
               <Field
               id={"graduated"}
               name={"graduated"}
@@ -312,6 +330,7 @@ const SignUpForm = () => {
               layout={"horizontal"}
               validator={radioGroupValidator}
             />
+            </Borderbottom>
             </div>
           </fieldset>
           <div className="k-form-buttons" style={{display:'flex',justifyContent:'center'}}>
@@ -322,7 +341,7 @@ const SignUpForm = () => {
               Submit
             </button>
           </div>
-          
+          </StyledContainer>
         </FormElement>
       )}
     />
