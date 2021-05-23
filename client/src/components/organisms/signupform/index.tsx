@@ -6,25 +6,76 @@ import Botsignup from "components/organisms/signup2/2";
 import SignupText from "components/organisms/signup2/3";
 import { RadioGroup, RadioButtonChangeEvent } from '@progress/kendo-react-inputs';
 import { Button } from '@progress/kendo-react-buttons'
+import Values from './types'
 
 
 
+import { Form, Field, FormElement,FieldWrapper } from "@progress/kendo-react-form";
+import { Mood } from '../../../interfaces/entities/Patient'
 
-import { Form, Field, FormElement } from "@progress/kendo-react-form";
-
-import { Error, Label } from "@progress/kendo-react-labels";
+import { Error, Label,Hint } from "@progress/kendo-react-labels";
 import { Input } from "@progress/kendo-react-inputs";
 
 const dataCounselor = [
-  { label: "Yes", value: "yes" },
-  { label: "No", value: "no" },
+  { label: "Yes", value: true },
+  { label: "No", value: false },
 ]
 
 const mood = [
-  { label: "Happy", value: "happy" },
-  { label: "Sad", value: "sad" },
-  { label: "Gay", value: "gay" },
+  { label: "Normal", value: Mood.Normal },
+  { label: "Happy", value: Mood.Happy },
+  { label: "Depressed", value: Mood.Depressed },
+  { label: "Anxious", value: Mood.Anxious },
+  { label: "Lonely", value: Mood.Lonely },
+  { label: "Stressed", value: Mood.Stressed },
 ];
+
+const radioGroupValidator = (value:any) =>
+  !value ? "Type of Confirmation is required" : "";
+
+const FormRadioGroup = (fieldRenderProps:any) => {
+  const {
+    validationMessage,
+    touched,
+    id,
+    label,
+    layout,
+    valid,
+    disabled,
+    hint,
+    ...others
+  } = fieldRenderProps;
+
+  const showValidationMessage = touched && validationMessage;
+  const showHint = !showValidationMessage && hint;
+  const hindId = showHint ? `${id}_hint` : "";
+  const errorId = showValidationMessage ? `${id}_error` : "";
+  const labelId = label ? `${id}_label` : "";
+
+  return (
+    <FieldWrapper>
+      <Label
+        id={labelId}
+        editorId={id}
+        editorValid={valid}
+        editorDisabled={disabled}
+      >
+        {label}
+      </Label>
+      <RadioGroup
+        id={id}
+        ariaDescribedBy={`${hindId} ${errorId}`}
+        ariaLabelledBy={labelId}
+        valid={valid}
+        disabled={disabled}
+        layout={layout}
+        {...others}
+      />
+      {showHint && <Hint id={hindId}>{hint}</Hint>}
+      {showValidationMessage && <Error id={errorId}>{validationMessage}</Error>}
+    </FieldWrapper>
+  );
+};
 
 const emailRegex = new RegExp(/\S+@\S+\.\S+/);
 const emailValidator = (value: any) =>
@@ -55,22 +106,22 @@ const SignUpForm = () => {
     [setSelectedValue]
 );
 
-  const handleSubmit = async (values:any) => {
+  const handleSubmit = async (values:Values) => {
 
     console.log(values)
     // To Do Asign Loader or disable button
 
     const options: RequestInit = {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      mode: "cors", // no-cors, *cors, same-origin
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
+      method: "POST", 
+      mode: "cors", 
+      cache: "no-cache", 
+      credentials: "same-origin", 
       headers: {
         "Content-Type": "application/json",
-        // 'Content-Type': 'application/x-www-form-urlencoded',
+       
       },
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(values), // body data type must match "Content-Type" header
+      referrerPolicy: "no-referrer", 
+      body: JSON.stringify(values),
     };
 
     const response = await fetch("/sessions/register", options);
@@ -83,6 +134,8 @@ const SignUpForm = () => {
       alert(data.message);
     }
   };
+
+
   return (
 
     
@@ -154,8 +207,16 @@ const SignUpForm = () => {
                 minLength={8}
                 required={true}
               />
-              <h1>How are you feeling?</h1>
-              <RadioGroup data={mood} />
+              <Field
+              id={"mood"}
+              name={"mood"}
+              label={"How are you feeling?"}
+              hint={"Hint: Choose a your mood"}
+              component={FormRadioGroup}
+              data={mood}
+              layout={"horizontal"}
+              validator={radioGroupValidator}
+            />
             </div>
           </fieldset>
           <div className="k-form-buttons">
@@ -240,8 +301,16 @@ const SignUpForm = () => {
                 id='university'
                 required={true}
               />
-              <h1>are you graduated?</h1>
-                <RadioGroup data={dataCounselor} />
+              <Field
+              id={"graduated"}
+              name={"graduated"}
+              label={"Are you graduated?"}
+              hint={"Hint: Choose a your answer"}
+              component={FormRadioGroup}
+              data={dataCounselor}
+              layout={"horizontal"}
+              validator={radioGroupValidator}
+            />
             </div>
           </fieldset>
           <div className="k-form-buttons">
