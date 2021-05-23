@@ -12,6 +12,6 @@
     },
     "outDir": "dist"
   },
-  "include": ["./"],
-  "exclude": ["node_modules", "client", "testing"]
+  "include": ["./**/*"],
+  "exclude": ["node_modules"]
 }

@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node server/dist/app",
-    "test": "jest",
+    "test": "jest --env=node --forceExit",
     "build": "cd server/client && npm install && npm run build",
-    "dev": "tsc && npm run build && npx nodemon --watch server -e ts --exec npx nodemon server/dist/app"
+    "dev": "tsc && npm run build && npx nodemon --watch server -e ts --exec npx nodemon server/dist/app",
+    "dbremote": "node migrations/remote refresh",
+    "dblocal": "node migrations/migration refresh"
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +32,7 @@
     "@types/jsonwebtoken": "^8.5.1",
     "@types/node": "^15.0.2",
     "@types/react": "^17.0.5",
+    "@types/supertest": "^2.0.11",
     "@types/uuid": "^8.3.0",
     "husky": "^6.0.0",
     "jest": "26.6.0",

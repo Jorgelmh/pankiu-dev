@@ -320,8 +320,8 @@ export const registerCounselor = async (
     uid = rows[0].id;
 
     await conn.execute(
-      `INSERT INTO counselors (user_id, university, graduated, rate) VALUES (?, ?, ?, ?)`,
-      [uid, university, graduated, 5]
+      `INSERT INTO counselors (university, isgraduated, rate, user_id) VALUES (?, ?, ?, ?)`,
+      [university, graduated, 5, uid]
     );
   } catch (e) {
     conn.end();
