@@ -8,7 +8,7 @@ const Botsignup: React.FC = () => {
 <Text>Or Signup with</Text>
 </div>
 <div style={{margin:'2rem 1rem 0px 1rem',display:'flex', justifyContent:'center'}}>
-<Button icon='facebook-box social' style={{marginRight:'1rem'}}/>
+<Button icon='facebook-box social' style={{marginRight:'1rrem'}}/>
 <Button icon='google-box social'/>
 </div>
 <div>

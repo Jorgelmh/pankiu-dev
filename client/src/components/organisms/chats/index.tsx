@@ -8,7 +8,6 @@ import TopBar from "../topbar"
 const Chatspage: React.FC = () => {
   return (
     <>
-    <TopBar/>
     <Title margin='20px 0px 0px 30px'> Chats </Title>
     <NotificationCon>
     <img src='img\human-resources-svgrepo-com 3.svg' style={{display:'block', alignContent:'flex-start', margin:'auto 0px auto 10px'}}/>
