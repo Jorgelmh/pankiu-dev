@@ -7,5 +7,5 @@ export const StyledContainer = styled(Container)`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-
+  height:100%;
 `

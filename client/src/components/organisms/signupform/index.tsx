@@ -155,7 +155,7 @@ const SignUpForm = () => {
       <Form
       onSubmit={handleSubmit}
       render={(formRenderProps) => (
-        <FormElement >
+        <FormElement style={{display:'flex', justifyContent:'center', width:'100%',flexDirection:'column', margin:'6rem 0px 3rem 0px'}}>
           <fieldset className={"k-form-fieldset"}>
             <legend className={"k-form-legend"}>
             Sign Up
@@ -175,6 +175,7 @@ const SignUpForm = () => {
                 required={true}
                 minLength={5}
               />
+
             </div>
 
             <div className="mb-3">
@@ -313,12 +314,11 @@ const SignUpForm = () => {
             />
             </div>
           </fieldset>
-          <div className="k-form-buttons">
+          <div className="k-form-buttons" style={{display:'flex',justifyContent:'center'}}>
             <button
               type={"submit"}
               className="k-button"
-              disabled={!formRenderProps.allowSubmit}
-            >
+              disabled={!formRenderProps.allowSubmit}>
               Submit
             </button>
           </div>
