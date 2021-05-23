@@ -46,7 +46,7 @@ afterAll((done) => {
 /* Login and create a session token */
 describe('POST /sessions/login -> Create a session', () => {
 
-    test('Attemp to log in a patient', (done) => {
+    test('Attempt to log in a patient', (done) => {
 
         /* Api request to log in a patient and record a token */
         request(app)
