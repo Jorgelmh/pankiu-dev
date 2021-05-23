@@ -1,16 +1,17 @@
 import { StyledContainer } from "./styles";
 import Text from "components/atoms/text";
+import IconTextProps from './types'
 
-const IconText: React.FC = (props) => {
+const IconText: React.FC<IconTextProps> = (props) => {
   return (
     <>
       <StyledContainer>
         <img
-          width="50px"
-          src="https://cdn.arstechnica.net/wp-content/uploads/2016/02/5718897981_10faa45ac3_b-640x624.jpg"
-          alt=""
+          width="30px"
+          src={props.src}
+          alt={props.alt}
         />
-        <Text>{props.children}</Text>
+        <Text size='14px'>{props.children}</Text>
       </StyledContainer>
     </>
   );

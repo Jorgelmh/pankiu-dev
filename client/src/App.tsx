@@ -11,16 +11,24 @@ import Mood from "components/templates/mood"
 import Notification from "components/templates/notification"
 import Chats from "components/templates/chats"
 import Chat from "components/templates/chats/chat"
+import Layout from 'components/templates/layout'
+import Login from 'components/templates/login'
 function App() {
   return (
     <Router>
+       <GlobalStyles />
+       <Layout>
+
       <Switch>
         <Route exact path="/">
-          <GlobalStyles />
+         
           <Home />
         </Route>
         <Route exact path="/signup">
           <Signup />
+        </Route>
+        <Route exact path="/login">
+          <Login />
         </Route>
         <Route exact path="/profile">
           <Profile />
@@ -38,6 +46,8 @@ function App() {
           <Chat />
         </Route>
       </Switch>
+      </Layout>
+
     </Router>
   );
 }
