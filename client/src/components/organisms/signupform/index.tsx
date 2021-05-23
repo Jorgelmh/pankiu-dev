@@ -50,10 +50,11 @@ const SignUpForm = () => {
     }
   };
   return (
+
     <Form
       onSubmit={handleSubmit}
       render={(formRenderProps) => (
-        <FormElement style={{ maxWidth: 650 }}>
+        <FormElement style={{display:'flex', justifyContent:'center', width:'30%',flexDirection:'column', margin:'6rem 0px 3rem 0px'}}>
           <fieldset className={"k-form-fieldset"}>
             <legend className={"k-form-legend"}>
               Please fill in the fields:
@@ -97,7 +98,7 @@ const SignUpForm = () => {
               />
             </div>
           </fieldset>
-          <div className="k-form-buttons">
+          <div className="k-form-buttons" style={{display:'flex', justifyContent:'center', margin:'4rem auto 0px auto'}}>
             <button
               type={"submit"}
               className="k-button"
