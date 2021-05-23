@@ -7,8 +7,9 @@ const App: React.FC = () => {
   return (
     <>
     
-
+    <div style={{display:'flex', justifyContent:'center', height:'34.25rem'}}>
       <SignUpForm/>
+      </div>
 
 
     </>
