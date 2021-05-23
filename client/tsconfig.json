@@ -22,12 +22,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": [
-    "src",
-    "../server"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
-  "entends": "./paths.json"
+  "include": ["src"],
+  "exclude": ["node_modules"],
 }

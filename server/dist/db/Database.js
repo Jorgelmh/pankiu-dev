@@ -251,7 +251,7 @@ const registerCounselor = (username, password, email, university, graduated) => 
         /* Try to record the user in db */
         const rows = ((yield conn.execute(`SELECT id FROM users WHERE username=?`, [username]))[0]);
         uid = rows[0].id;
-        yield conn.execute(`INSERT INTO counselors (user_id, university, graduated, rate) VALUES (?, ?, ?, ?)`, [uid, university, graduated, 5]);
+        yield conn.execute(`INSERT INTO counselors (university, isgraduated, rate, user_id) VALUES (?, ?, ?, ?)`, [university, graduated, 5, uid]);
     }
     catch (e) {
         conn.end();
