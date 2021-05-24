@@ -70,12 +70,13 @@ export const getMessages = async (
   id: number,
   otherId: number
 ): Promise<Message[]> => {
+
   /* Get a connection */
   const conn = await getConnection();
   const rows = <RowDataPacket[]>(
     await conn.execute(
-      `SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND 
-        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=? ORDER BY date`,
+      `SELECT * FROM (SELECT sender_id, receiver_id, message, time FROM messages WHERE sender_id=? AND 
+        receiver_id=? UNION SELECT sender_id, receiver_id, message, time FROM messages WHERE sender_id=? AND receiver_id=?) a ORDER BY time`,
       [id, otherId, otherId, id]
     )
   )[0];
@@ -88,6 +89,7 @@ export const getMessages = async (
       senderId: row.receiver_id,
       receiverId: row.sender_id,
       text: row.message,
+      date: row.time
     };
 
     messages.push(message);
@@ -180,8 +182,6 @@ export const getFriendRequests = async (
  *  @param oid {number} - Id of the user that sent the friend request
  */
 export const acceptFriendRequest = async (id: number, oid: number) => {
-
-  console.log(id, oid)
 
   /* Get a connection */
   const conn = await getConnection();
