@@ -3,6 +3,7 @@ import Session from '../routes/sessions'
 import { createServer, Server } from "http";
 import * as request from 'supertest'
 import { Patient, Counselor } from './seeds'
+import PatientModel, { Mood } from '../interfaces/entities/Patient';
 
 /**
  *  ====================================
@@ -16,6 +17,7 @@ import { Patient, Counselor } from './seeds'
 /* Creating the driver app */
 const app = express()
 let server: Server
+let token: string
 
 beforeAll((done) => {
     
@@ -51,7 +53,6 @@ describe('POST /sessions/register -> Creating a patient user', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeDefined()
             done()
         })
@@ -65,7 +66,6 @@ describe('POST /sessions/register -> Creating a patient user', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeFalsy()
             expect(response.body.message).toBe('Username already taken')
             done()
@@ -84,7 +84,6 @@ describe('POST /sessions/register -> Creating a counselor user', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeDefined()
             done()
         })
@@ -98,7 +97,6 @@ describe('POST /sessions/register -> Creating a counselor user', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeFalsy()
             expect(response.body.message).toBe('Username already taken')
             done()
@@ -120,7 +118,6 @@ describe('POST /sessions/login -> Loging in a patient and a counselor', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeTruthy()
             expect(response.body.token).toBeDefined()
             done()
@@ -138,10 +135,104 @@ describe('POST /sessions/login -> Loging in a patient and a counselor', () => {
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            console.log(response.body)
             expect(response.body.ok).toBeTruthy()
             expect(response.body.token).toBeDefined()
             done()
         })
     ])
+})
+
+/* Test update username, password and email of a new user */
+describe('PUT /sessions/update -> Modify random unique users', () => {
+
+    /* Create a new random patient */
+    test('Create a new random an unique Patient', (done) => {
+
+        request(app)
+        .post('/sessions/register')
+        .send({
+            username: `user_${Date.now()}`,
+            password: '1234567',
+            email: `${Date.now()}@example.com`,
+            mood: Mood.Depressed
+        })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeTruthy()
+            /* Store session token */
+            token = response.body.token
+            done()
+        })
+    })
+
+    /* Try to change the new patient's username */
+    test('Try to change the username to an already existing one', (done) => {
+
+        request(app)
+        .put('/sessions/update')
+        .set('token', token)
+        .send({
+            username: Patient.username
+        })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeFalsy()
+            expect(response.body.message).toBe('An error has occurred while changing your username, probably the new username is already taken')
+            done()
+        })
+    })
+
+    /* Try to change the new patient's email */
+    test('Try to change the email to an already existing one', (done) => {
+
+        request(app)
+        .put('/sessions/update')
+        .set('token', token)
+        .send({
+            email: Patient.email
+        })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeFalsy()
+            expect(response.body.message).toBe('An error has occurred while changing your email, probably the new email is already taken')
+            done()
+        })
+
+    })
+
+    /**
+     *  =============================
+     *      USE VALID VALUES 
+     *  =============================
+     */
+    
+    test('Change username, password and email for new unique values', (done) => {
+
+        /* New values */
+        const newPayload = {
+            username: `user_${Date.now()}`,
+            password: `12345678`,
+            email: `${Date.now()}@example.com`
+        }
+
+        request(app)
+        .put('/sessions/update')
+        .set('token', token)
+        .send(newPayload)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeTruthy()
+            const user: PatientModel = JSON.parse(Buffer.from(response.body.token.split('.')[1], 'base64').toString())
+            console.log(user)
+            expect(user.username).toBe(newPayload.username)
+            expect(user.email).toBe(newPayload.email)
+            expect(user.id).toBeDefined()
+            done()
+        })
+    })
+
 })

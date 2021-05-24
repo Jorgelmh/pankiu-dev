@@ -281,4 +281,9 @@ export default class Server {
   public getServer(): SocketIOServer {
     return this.io;
   }
+
+  /* Get Express application instance */
+  public getExpressApp(): Application{
+    return this.app
+  }
 }
