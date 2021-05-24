@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 import { StyledContainer } from './styles'
 import Container from 'components/atoms/container'
 
@@ -90,6 +91,7 @@ const EmailInput = (fieldRenderProps: any) => {
   );
 };
 const SignUpForm = () => {
+  const [redirect, setRedirect] = useState(false)
   const [form, setForm] = useState('')
   const [selectedValue, setSelectedValue] = React.useState('first');
 
@@ -99,12 +101,7 @@ const SignUpForm = () => {
     password: "",
   });
 
-  const handleChange = React.useCallback(
-    (e: RadioButtonChangeEvent) => {
-        setSelectedValue(e.value);
-    },
-    [setSelectedValue]
-);
+
 
   const handleSubmit = async (values:Values) => {
 
@@ -130,11 +127,15 @@ const SignUpForm = () => {
     if (data.ok) {
       console.log(data.token);
       localStorage.setItem("token", data.token);
+      setRedirect(true)
     } else {
       alert(data.message);
     }
   };
 
+  if(redirect){
+    return <Redirect to='/profile' />
+  }
 
   return (
 
@@ -165,9 +166,7 @@ const SignUpForm = () => {
                 User name
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 id='username'
                 name={"username"}
                 component={Input}
@@ -183,9 +182,7 @@ const SignUpForm = () => {
                 Email
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 name={"email"}
                 type={"email"}
                 component={EmailInput}
@@ -199,9 +196,7 @@ const SignUpForm = () => {
                 Password
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 name={"password"}
                 component={Input}
                 id='password'
@@ -248,9 +243,7 @@ const SignUpForm = () => {
                 User name
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 id='username'
                 name={"username"}
                 component={Input}
@@ -265,9 +258,7 @@ const SignUpForm = () => {
                 Email
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 name={"email"}
                 type={"email"}
                 component={EmailInput}
@@ -281,9 +272,7 @@ const SignUpForm = () => {
                 Password
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 name={"password"}
                 component={Input}
                 id='password'
@@ -294,9 +283,7 @@ const SignUpForm = () => {
                 University
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+               
                 name={"university"}
                 component={Input}
                 id='university'
