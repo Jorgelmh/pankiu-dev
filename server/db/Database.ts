@@ -180,14 +180,18 @@ export const getFriendRequests = async (
  *  @param oid {number} - Id of the user that sent the friend request
  */
 export const acceptFriendRequest = async (id: number, oid: number) => {
+
+  console.log(id, oid)
+
   /* Get a connection */
   const conn = await getConnection();
 
   /* Execute query to accept the friend request */
   await conn.execute(
-    `UPDATE friends accepted=1 WHERE receiver_id=? AND sender_id=?`,
-    [id, oid]
+    `UPDATE friends SET accepted=? WHERE receiver_id=? AND sender_id=?`,
+    [1, id, oid]
   );
+
   conn.end();
 };
 

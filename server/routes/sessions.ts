@@ -27,6 +27,6 @@ export default class Session {
     this.app.get("/sessions/validate", AuthToken);
 
     /* Update user's information */
-    this.app.post("/sessions/update", AuthToken, updateDetails);
+    this.app.put("/sessions/update", AuthToken, updateDetails);
   }
 }
