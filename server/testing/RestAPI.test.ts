@@ -49,21 +49,23 @@ afterAll((done) => {
 })
 
 /* Login and create a session token */
-describe('POST /sessions/login -> Create a session', () => {
+describe('POST /sessions/register -> Create a session', () => {
 
-    test('Attempt to log in a patient', (done) => {
+    test('Attempt to register a patient', (done) => {
 
         /* Api request to log in a patient and record a token */
         request(app)
-        .post('/sessions/login')
+        .post('/sessions/register')
         .send({
-            username: Patient.username,
-            password: Patient.password
+            username: `user_${Date.now()}`,
+            password: '1234567',
+            email: `${Date.now()}@example.com`,
+            mood: Mood.Depressed
         })
         .expect('Content-Type', /json/)
         .expect(200)
         .then(response => {
-            expect(response.body.ok).toBeDefined()
+            expect(response.body.ok).toBeTruthy()
             token = response.body.token
             const user: PatientModel = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
             idPatient = user.id
@@ -185,7 +187,46 @@ describe('POST /api/addfriends', () => {
             expect(response.body.ok).toBeTruthy()
             done()
         })
+    })
+})
 
+/* Send a message to a friend */
+describe('GET /api/messages/:uid -> Messages with new user', () => {
+
+    /* Record a message on the db */
+    test('Record a message in the chat', (done) => {
+        recordMessage(idPatient, idCounselor, 'Hello')
+        .then(() => {
+            done()
+        })
     })
 
+    /* Check the patient gets their message */
+    test('Fetch message -> Patient', (done) => {
+
+        request(app)
+        .get(`/api/messages/${idCounselor}`)
+        .set('token', token)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeTruthy()
+            expect(response.body.body.messages).toHaveLength(1)
+            done()
+        })
+    })
+
+    /* Check the counselor gets the patients message */
+    test('Fetch message -> Counselor', (done) => {
+        request(app)
+        .get(`/api/messages/${idPatient}`)
+        .set('token', counselorToken)
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .then(response => {
+            expect(response.body.ok).toBeTruthy()
+            expect(response.body.body.messages).toHaveLength(1)
+            done()
+        })
+    })
 })

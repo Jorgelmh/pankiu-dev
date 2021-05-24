@@ -38,6 +38,7 @@ beforeAll((done) => {
 /* Close servers and connections */
 afterAll((done) => {
     server.close()
+    require('./ChatTexting')
     done()
 })
 
@@ -227,7 +228,6 @@ describe('PUT /sessions/update -> Modify random unique users', () => {
         .then(response => {
             expect(response.body.ok).toBeTruthy()
             const user: PatientModel = JSON.parse(Buffer.from(response.body.token.split('.')[1], 'base64').toString())
-            console.log(user)
             expect(user.username).toBe(newPayload.username)
             expect(user.email).toBe(newPayload.email)
             expect(user.id).toBeDefined()
