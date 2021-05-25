@@ -20,7 +20,7 @@ class Session {
         /* Authenticate a token */
         this.app.get("/sessions/validate", AuthToken_1.AuthToken);
         /* Update user's information */
-        this.app.post("/sessions/update", AuthToken_1.AuthToken, SessionController_1.updateDetails);
+        this.app.put("/sessions/update", AuthToken_1.AuthToken, SessionController_1.updateDetails);
     }
 }
 exports.default = Session;

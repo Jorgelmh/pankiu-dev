@@ -138,8 +138,6 @@ const SignUpForm = () => {
 
   return (
 
-    
-    
   <StyledContainer>
     <Container>
 

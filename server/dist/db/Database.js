@@ -67,8 +67,8 @@ exports.getChats = getChats;
 const getMessages = (id, otherId) => __awaiter(void 0, void 0, void 0, function* () {
     /* Get a connection */
     const conn = yield exports.getConnection();
-    const rows = (yield conn.execute(`SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND 
-        receiver_id=? UNION SELECT sender_id, receiver_id, message FROM messages WHERE sender_id=? AND receiver_id=? ORDER BY date`, [id, otherId, otherId, id]))[0];
+    const rows = (yield conn.execute(`SELECT * FROM (SELECT sender_id, receiver_id, message, time FROM messages WHERE sender_id=? AND 
+        receiver_id=? UNION SELECT sender_id, receiver_id, message, time FROM messages WHERE sender_id=? AND receiver_id=?) a ORDER BY time`, [id, otherId, otherId, id]))[0];
     const messages = [];
     /* Model rows from the query */
     rows.forEach((row) => {
@@ -76,6 +76,7 @@ const getMessages = (id, otherId) => __awaiter(void 0, void 0, void 0, function*
             senderId: row.receiver_id,
             receiverId: row.sender_id,
             text: row.message,
+            date: row.time
         };
         messages.push(message);
     });
@@ -158,7 +159,7 @@ const acceptFriendRequest = (id, oid) => __awaiter(void 0, void 0, void 0, funct
     /* Get a connection */
     const conn = yield exports.getConnection();
     /* Execute query to accept the friend request */
-    yield conn.execute(`UPDATE friends accepted=1 WHERE receiver_id=? AND sender_id=?`, [id, oid]);
+    yield conn.execute(`UPDATE friends SET accepted=? WHERE receiver_id=? AND sender_id=?`, [1, id, oid]);
     conn.end();
 });
 exports.acceptFriendRequest = acceptFriendRequest;
