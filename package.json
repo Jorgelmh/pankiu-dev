@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "cd server && node dist/app",
-    "build": "cd client && npm install && npm run build",
-    "dev": "npm run build && npm start"
+    "client": "cd client && npm install && npm run build",
+    "server": "cd server && npm install && tsc",
+    "dev": "npm run client && npm server && node dist/app"
   },
   "author": "",
   "license": "ISC"
