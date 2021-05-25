@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd server && npm install && tsc && node dist/app",
+    "start": "cd server && node dist/app",
     "build": "cd client && npm install && npm run build",
     "dev": "npm run build && npm start"
   },
