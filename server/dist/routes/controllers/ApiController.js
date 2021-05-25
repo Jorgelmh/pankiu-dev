@@ -161,12 +161,12 @@ const acceptFriend = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         yield db.acceptFriendRequest(user.id, uid);
     }
     catch (e) {
-        res.json({
+        return res.json({
             ok: false,
             message: "An error has occurred while accepting the friend request",
         });
     }
-    res.json({
+    return res.json({
         ok: true,
     });
 });

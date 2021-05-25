@@ -13,6 +13,7 @@ import {
 } from './styles'
 
 const Profile: React.FC = () => {
+
   return (
     <>
       <HeaderProfile>

@@ -226,6 +226,10 @@ class Server {
     getServer() {
         return this.io;
     }
+    /* Get Express application instance */
+    getExpressApp() {
+        return this.app;
+    }
 }
 exports.default = Server;
 //# sourceMappingURL=Server.js.map
