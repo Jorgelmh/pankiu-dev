@@ -6,7 +6,8 @@
   "scripts": {
     "start": "cd server && node dist/app",
     "client": "cd client && npm install && npm run build",
-    "build": "cd server && npm install",
+    "server": "cd server && npm install",
+    "build": "npm run client && npm run server",
     "dev": "npm run client && npm server && node dist/app"
   },
   "author": "",
