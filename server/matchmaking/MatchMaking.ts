@@ -26,6 +26,7 @@ export default class MatchMaking {
 
   /* Add person to their correspondent queue */
   public addPerson(person: PersonSearch): Match {
+
     /* Check if the person is a patient */
     if ("param" in person) {
       this.patientsQueue.queue(person);
