@@ -8,7 +8,7 @@
     "client": "cd client && npm install && npm run build",
     "server": "cd server && npm install",
     "build": "npm run server",
-    "dev": "npm run client && npm server && node dist/app"
+    "dev": "npm run client && npm run server && npm start"
   },
   "author": "",
   "license": "ISC"
