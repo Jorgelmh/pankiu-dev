@@ -6,6 +6,8 @@ import QueuePatient from '../interfaces/QueueParam/QueuePatient'
 import { searchParam } from '../interfaces/search/PatientSearch'
 import { Language } from '../interfaces/QueueParam/Language'
 import QueueCounselor from '../interfaces/QueueParam/QueueCounselor'
+import QueueGuest from '../interfaces/QueueParam/QueueGuest'
+import { Mood } from '../interfaces/entities/Patient'
 
 /**
  *  ===================================================
@@ -18,6 +20,7 @@ import QueueCounselor from '../interfaces/QueueParam/QueueCounselor'
 
 let patientSocket: Socket
 let counselorSocket: Socket
+let guestSocket: Socket
 let server: Server
 let roomid: string
 let patientPeerId: string
@@ -37,9 +40,10 @@ beforeAll((done) => {
 
         console.log(`Socket Server listening in port: ${port}`)
 
-        /* Create client */
+        /* Create client sockets */
         patientSocket = Client(`http://localhost:${3000}`)
         counselorSocket = Client(`http://localhost:${3000}`)
+        guestSocket = Client(`http://localhost:${3000}`)
         
         counselorSocket.on('connect', done)
     })
@@ -145,4 +149,36 @@ describe('Allow to set up a video chat', () => {
 
         patientSocket.emit(JOINED_CALL, {roomid, peerid: patientPeerId})
     })
+})
+
+/* Test matching between guests and counselors */
+describe('Match a Guest with a Counselor', () => {
+
+    /* At this moment the queue should be empty */
+    test('Find a Guest-Counselor match', (done) => {
+        guestSocket.on(ROOM_FOUND, ({ roomId }) => {
+            expect(roomId).toBeDefined()
+            done()
+        })
+
+        /* Prepare queue requests */
+        const guestParams: QueueGuest = {
+            peerid: uuidv4(),
+            name: 'Guest user',
+            param: searchParam.only_counselor,
+            mood: Mood.Depressed,
+            language: [Language.English]
+        }
+
+        const counselorParams: QueueCounselor = {
+            token: counselorToken,
+            peerid: counselorPeerId,
+            language: [Language.English]
+        }
+
+        /* Queue both users */
+        guestSocket.emit(QUEUE_GUEST, guestParams)
+        counselorSocket.emit(QUEUE_USER, counselorParams)
+    })
+
 })
