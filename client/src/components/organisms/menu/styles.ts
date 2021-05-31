@@ -9,5 +9,7 @@ export const StyledContainer = styled(Container)`
   border-radius: 40px 40px 0px 0px;
   display: flex;
   justify-content: space-around;
+  text-align: center;
+  align-items:center;
   font-family: "poppins" sans-serif;
 `;

@@ -24,4 +24,5 @@ export const StyledButton = styled(Button)`
   align-items: flex-end;
   margin-top: 30px;
   margin-bottom: 30px;
+  width:30%;
 `;
