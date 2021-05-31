@@ -26,8 +26,13 @@ let roomid: string
 let patientPeerId: string
 let counselorPeerId: string
 
+<<<<<<< HEAD
 const patientToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJKb3JnZSIsImVtYWlsIjoiZXhhbXBsZUBlbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwibW9vZCI6IkRlcHJlc3NlZCIsImlhdCI6MTYyMjQ4MTI0Mn0.-cJtSVzOI02g_Sp5BZSyIAIWhgo4OoRvf_IXjVsbMlQ'
 const counselorToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJEYW1pYW5kIiwiZW1haWwiOiJleGFtcGxlMkBlbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwicmF0ZSI6NSwiaWF0IjoxNjIyNDgxMDU4fQ.yqBJH_VqXqFB1vgebtkt5fmLsDyVw-5xp9HLzwck1EA'
+=======
+const patientToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJKb3JnZSIsImVtYWlsIjoiZXhhbXBsZUBlbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwibW9vZCI6IkRlcHJlc3NlZCIsImlhdCI6MTYyMjAzNzgyMX0.QLg6QLGrvU7hM0ih5rZPq1RImFI-zuLLxHxygxwhZS8'
+const counselorToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJEYW1pYW5kIiwiZW1haWwiOiJleGFtcGxlMkBlbWFpbC5jb20iLCJpc0FkbWluIjpmYWxzZSwicmF0ZSI6NSwiaWF0IjoxNjIyMDM4NDU2fQ.xjM7kKJn4FbJwD3Yufo8wF5OvaSxmcly8cNO6TonygQ'
+>>>>>>> 7efea891546259834aa42ead9d203758ec1d048e
 
 /* Create the server instance and the client */
 beforeAll((done) => {

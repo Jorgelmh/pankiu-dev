@@ -138,6 +138,7 @@ describe('POST /sessions/login -> Loging in a patient and a counselor', () => {
         .then(response => {
             expect(response.body.ok).toBeTruthy()
             expect(response.body.token).toBeDefined()
+            console.log(response.body.token)
             done()
         })
     ])
