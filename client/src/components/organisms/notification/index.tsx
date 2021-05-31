@@ -1,7 +1,7 @@
 import Title from "components/atoms/title"
 import NotificationContainer from "components/molecules/Notificationbar"
 import TopBar from "../topbar"
-import FriendRequest from '../../../interfaces/FriendRequest'
+import FriendRequest from 'interfaces/FriendRequest'
 import { useEffect, useState } from "react"
 import Skeleton from 'react-loading-skeleton'
 

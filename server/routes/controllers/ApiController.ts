@@ -71,30 +71,6 @@ export const fetchMessages = async (
   });
 };
 
-/* Change the mood of a patient */
-export const changeMood = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  /* Model user data */
-  const user: User = req.body.decoded;
-  const newMood: Mood = req.body.mood;
-
-  try {
-    /* Change the mood stores in the db */
-    await db.changeMood(user.id, newMood);
-  } catch (e) {
-    return res.json({
-      ok: false,
-      message: "An error has ocurred while changing your mood",
-    });
-  }
-
-  res.json({
-    ok: true,
-  });
-};
-
 /* Fetch multiple quotes from type.fit -> total length of 1643 */
 export const fetchQuotes = async (
   req: express.Request,

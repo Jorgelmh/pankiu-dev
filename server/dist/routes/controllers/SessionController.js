@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateDetails = exports.login = exports.register = void 0;
+exports.changeMood = exports.updateDetails = exports.login = exports.register = void 0;
 const db = require("../../db/Database");
 const jwt = require("jsonwebtoken");
 /**
@@ -180,4 +180,36 @@ const updateDetails = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.updateDetails = updateDetails;
+/* Change the mood of a patient */
+const changeMood = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    /* Model user data */
+    const user = req.body.decoded;
+    const newMood = req.body.mood;
+    try {
+        /* Change the mood stores in the db */
+        yield db.changeMood(user.id, newMood);
+    }
+    catch (e) {
+        return res.json({
+            ok: false,
+            message: "An error has ocurred while changing your mood",
+        });
+    }
+    /* Update and return session token */
+    user.mood = newMood;
+    jwt.sign(user, process.env.secret, (err, token) => {
+        /* Check if there's an error */
+        if (err) {
+            return res.json({
+                ok: false,
+                message: "Error while creating a new session token",
+            });
+        }
+        return res.json({
+            ok: true,
+            token
+        });
+    });
+});
+exports.changeMood = changeMood;
 //# sourceMappingURL=SessionController.js.map

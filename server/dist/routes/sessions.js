@@ -21,6 +21,8 @@ class Session {
         this.app.get("/sessions/validate", AuthToken_1.AuthToken);
         /* Update user's information */
         this.app.put("/sessions/update", AuthToken_1.AuthToken, SessionController_1.updateDetails);
+        /* Change the mood of a patient on the database */
+        this.app.put("/api/changemood", AuthToken_1.AuthToken, SessionController_1.changeMood);
     }
 }
 exports.default = Session;

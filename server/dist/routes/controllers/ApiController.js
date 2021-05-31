@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.acceptFriend = exports.fetchNotifications = exports.addFriends = exports.fetchQuotes = exports.changeMood = exports.fetchMessages = exports.fetchChat = void 0;
+exports.acceptFriend = exports.fetchNotifications = exports.addFriends = exports.fetchQuotes = exports.fetchMessages = exports.fetchChat = void 0;
 const db = require("../../db/Database");
 const axios_1 = require("axios");
 /**
@@ -65,26 +65,6 @@ const fetchMessages = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     });
 });
 exports.fetchMessages = fetchMessages;
-/* Change the mood of a patient */
-const changeMood = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    /* Model user data */
-    const user = req.body.decoded;
-    const newMood = req.body.mood;
-    try {
-        /* Change the mood stores in the db */
-        yield db.changeMood(user.id, newMood);
-    }
-    catch (e) {
-        return res.json({
-            ok: false,
-            message: "An error has ocurred while changing your mood",
-        });
-    }
-    res.json({
-        ok: true,
-    });
-});
-exports.changeMood = changeMood;
 /* Fetch multiple quotes from type.fit -> total length of 1643 */
 const fetchQuotes = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     /* Get quotes from the API */

@@ -2,7 +2,6 @@ import { Application } from "express";
 import {
   fetchChat,
   fetchMessages,
-  changeMood,
   fetchQuotes,
   addFriends,
   fetchNotifications,
@@ -27,9 +26,6 @@ export default class API {
 
     /* Get messages of a specific chat */
     this.app.get("/api/messages/:uid", AuthToken, fetchMessages);
-
-    /* Change the mood of a patient on the database */
-    this.app.put("/api/changemood", AuthToken, changeMood);
 
     /* Return random motivaltional phrase */
     this.app.get("/api/quotes", fetchQuotes);
