@@ -1,3 +1,8 @@
+import { useEffect, useState } from 'react'
+import { Redirect } from 'react-router-dom'
+import Counselor from '../../../interfaces/entities/Counselor'
+import Patient from '../../../interfaces/entities/Patient'
+
 import Title from 'components/atoms/title'
 import { Button } from '@progress/kendo-react-buttons'
 import {
@@ -14,6 +19,22 @@ import {
 
 const Profile: React.FC = () => {
 
+  const [username, setUsername] = useState('Your Profile')
+  const [redirect, setRedirect] = useState(false)
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if(!token){
+      setRedirect(true)
+    }else{
+      const user: Patient | Counselor = JSON.parse(atob(token.split('.')[1]))
+      setUsername(user.username)
+    }
+  })
+  if(redirect){
+
+    return <Redirect to='login'/>
+  }
+ 
   return (
     <>
       <HeaderProfile>
@@ -27,7 +48,7 @@ const Profile: React.FC = () => {
           justifyContent="center"
           margin="40px 0px 0px 0px"
         >
-          Your Profile
+          {username}
         </Title>
         <ImgContainer>
           <img

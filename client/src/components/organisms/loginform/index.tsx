@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { StyledContainer } from './styles'
+import { Redirect } from 'react-router-dom'
 
 import Botsignup from "components/organisms/signup2/2";
 import SignupText from "components/organisms/signup2/3";
@@ -24,13 +25,10 @@ const EmailInput = (fieldRenderProps: any) => {
   );
 };
 const LoginForm = () => {
-  const [values, setValues] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [redirect, setRedirect] = useState(false)
 
-  const handleSubmit = async () => {
+
+  const handleSubmit = async (values:{username?:string, password?: string}) => {
     // To Do Asign Loader or disable button
 
     const options: RequestInit = {
@@ -46,16 +44,22 @@ const LoginForm = () => {
       body: JSON.stringify(values), // body data type must match "Content-Type" header
     };
 
-    const response = await fetch("/sessions/register", options);
+    const response = await fetch("/sessions/login", options);
     const data = await response.json();
 
     if (data.ok) {
       console.log(data.token);
       localStorage.setItem("token", data.token);
+      setRedirect(true)
     } else {
       alert(data.message);
     }
   };
+
+  if(redirect){
+    return <Redirect to='/profile' />
+  }
+
   return (
     
   <StyledContainer>
@@ -72,9 +76,7 @@ const LoginForm = () => {
                 User name
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+                
                 id='username'
                 name={"username"}
                 component={Input}
@@ -91,9 +93,7 @@ const LoginForm = () => {
                 Password
               </Label>
               <Field
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setValues({ ...values, [e.target.name]: e.target.value })
-                }
+                
                 name={"password"}
                 component={Input}
                 id='password'

@@ -18,12 +18,11 @@ function App() {
     <Router>
        <GlobalStyles />
        <Layout>
-
       <Switch>
         <Route exact path="/">
-
           <Home />
         </Route>
+        
         <Route exact path="/signup">
           <Signup />
         </Route>
