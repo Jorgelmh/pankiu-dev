@@ -59,6 +59,7 @@ const Notification: React.FC = () => {
       referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
     };
 
+    /*
     fetch('/api/notification', options)
       .then(response => response.json())
       .then(data => {
@@ -69,6 +70,12 @@ const Notification: React.FC = () => {
           setFetched(true)
         }
       })
+      */
+
+      setTimeout(() => {
+        setNotifications([{id: 2, username:'User1'}, {id: 3, username:'User2'}, {id: 4, username:'User3'}])
+        setFetched(true)
+      }, 1000)
   })
 
   if(!fetched){
@@ -82,7 +89,7 @@ const Notification: React.FC = () => {
       <>
         <Title margin='20px 0px 0px 30px'> Notifications</Title>
         {
-          notifications.length == 0 ? `You don't have any notification right now` : notifications.map((noti) => <NotificationContainer id={noti.id} username={noti.username} accept={handleAccept} />)
+          notifications.length == 0 ? `You don't have any notification right now` : notifications.map((noti) => <NotificationContainer id={noti.id} key={noti.id} username={noti.username} accept={handleAccept} />)
         }
       </>
     )

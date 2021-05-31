@@ -3,9 +3,10 @@ import { Redirect } from "react-router-dom"
  
 const App: React.FC = () => {
 
+  /*
   if(!localStorage.getItem('token'))
     return <Redirect to='/login' />
-
+    */
   return <>
   <Notification/>
 
