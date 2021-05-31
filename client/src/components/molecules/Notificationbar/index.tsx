@@ -1,22 +1,15 @@
 import { NotificationCon, TextCon } from "./styles"
-import { Badge, BadgeContainer } from "@progress/kendo-react-indicators"
+import Props from './types'
 
-
-const NotificationContainer: React.FC = () => {
+const NotificationContainer: React.FC<Props> = (props) => {
   return (
     <>
-
-<NotificationCon>
-<BadgeContainer style={{display:'flex',justifyContent:'center',width:'100%',paddingTop:'0.9rem'}}>
-  <TextCon>
-  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-  </TextCon>
-    <Badge align={{vertical: "top", horizontal: "start"}}>
-      10
-    </Badge>
-    </BadgeContainer>
-  </NotificationCon>
-
-    </>);
+      <NotificationCon>
+        <TextCon>
+          {props.username} has sent you a friend request
+        </TextCon>
+        <button onClick={() => props.accept(props.id)}>Accept</button>
+      </NotificationCon>
+  </>);
 }
 export default NotificationContainer
