@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd server && npm install && tsc && node dist/app",
-    "build": "cd client && npm install && npm run build",
-    "dev": "npm run build && npm start"
+    "start": "cd server && node dist/app",
+    "client": "cd client && npm install && npm run build",
+    "server": "cd server && npm install",
+    "build": "npm run server",
+    "dev": "npm run client && npm run server && npm start"
   },
   "author": "",
   "license": "ISC"

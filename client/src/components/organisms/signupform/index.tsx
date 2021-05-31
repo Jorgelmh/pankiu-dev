@@ -140,8 +140,6 @@ const SignUpForm = () => {
 
   return (
 
-    
-    
   <StyledContainer>
     <Container>
     <Button onClick={() => setForm('patient')}>

@@ -18,6 +18,7 @@ import {
 } from './styles'
 
 const Profile: React.FC = () => {
+
   const [username, setUsername] = useState('Your Profile')
   const [redirect, setRedirect] = useState(false)
   useEffect(() => {
@@ -33,8 +34,7 @@ const Profile: React.FC = () => {
 
     return <Redirect to='login'/>
   }
-  
-  
+ 
   return (
     <>
       <HeaderProfile>
