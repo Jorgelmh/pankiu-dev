@@ -68,6 +68,7 @@ export default class Server {
     this.io = new SocketIOServer(this.httpServer);
     this.matchMaking = new MatchMaking();
     this.rooms = {};
+    this.chatSockets = {}
   }
 
   /* Handle all routes of the sever: Further route objects will be added on the way */
@@ -104,11 +105,12 @@ export default class Server {
 
       /* Patient queuing for matchmaking -> Uses token to get users data */
       socket.on(QUEUE_USER, async (search: QueuePatient | QueueCounselor) => {
+
         let person: PersonSearch;
         jwt.verify(search.token, process.env.secret, (err, decoded: any) => {
           /* If there's an error with the session token */
           if (err) {
-            socket.emit(QUEUE_ERROR, { message: "The token is invalid" });
+            return socket.emit(QUEUE_ERROR, { message: "The token is invalid" });
           }
 
           /* Check whether the user is already in the queue */
@@ -179,10 +181,10 @@ export default class Server {
       });
 
       /* User joined the call */
-      socket.on(JOINED_CALL, ({ roomid, peerid }) => {
+      socket.on(JOINED_CALL, ({ peerid, roomid }) => {
         console.log(`User ${peerid} joined the room`);
         /* Contact other sockets connected */
-        socket.broadcast.emit(USER_CONNECTED, { peerid });
+        socket.broadcast.to(roomid).emit(USER_CONNECTED, { peerid });
       });
 
       /* Connect to chat rooms */
@@ -255,6 +257,7 @@ export default class Server {
 
   /* Create a socket room and communicate those sockets they're match */
   private communicateMatch(match: Match): void {
+
     /* Create random unique Id for the socket room */
     const roomId = uuidv4();
 
