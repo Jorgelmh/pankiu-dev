@@ -8,14 +8,14 @@ import { Mood } from '../interfaces/entities/Patient'
 
 export const Patient = {
     username: 'Jorge',
-    password: '1234567',
+    password: '12345678',
     email: 'example@email.com',
     mood: Mood.Depressed
 }
 
 export const Counselor = {
     username: 'Damiand',
-    password: '1234567',
+    password: '12345678',
     email: 'example2@email.com',
     university: 'UoS',
     graduated: false
