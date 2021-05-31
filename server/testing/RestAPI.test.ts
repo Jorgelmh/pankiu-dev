@@ -75,13 +75,13 @@ describe('POST /sessions/register -> Create a session', () => {
 })
 
 /* Use the token returned from the login attempt to consume the API */
-describe('PUT /api/changemood -> update patients mood' , () => {
+describe('PUT /sessions/changemood -> update patients mood' , () => {
 
     test('Attempt to change the mood with an unvalid token', (done) => {
 
         /* Api request to change the mood stored in the db */
         request(app)
-        .put('/api/changemood')
+        .put('/sessions/changemood')
         .set('token', 'sadsadasda')
         .send({
             mood: Mood.Happy
@@ -99,7 +99,7 @@ describe('PUT /api/changemood -> update patients mood' , () => {
 
         /* Api request to change the mood stored in the db */
         request(app)
-        .put('/api/changemood')
+        .put('/sessions/changemood')
         .set('token', token)
         .send({
             mood: Mood.Happy

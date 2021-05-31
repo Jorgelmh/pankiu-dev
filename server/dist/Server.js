@@ -43,6 +43,7 @@ class Server {
         this.io = new socket_io_1.Server(this.httpServer);
         this.matchMaking = new MatchMaking_1.default();
         this.rooms = {};
+        this.chatSockets = {};
     }
     /* Handle all routes of the sever: Further route objects will be added on the way */
     registerRoutes() {
@@ -75,7 +76,7 @@ class Server {
                 jwt.verify(search.token, process.env.secret, (err, decoded) => {
                     /* If there's an error with the session token */
                     if (err) {
-                        socket.emit(Channels_1.QUEUE_ERROR, { message: "The token is invalid" });
+                        return socket.emit(Channels_1.QUEUE_ERROR, { message: "The token is invalid" });
                     }
                     /* Check whether the user is already in the queue */
                     if (!this.matchMaking.canQueue(decoded.id))
@@ -141,10 +142,10 @@ class Server {
                 }
             }));
             /* User joined the call */
-            socket.on(Channels_1.JOINED_CALL, ({ roomid, peerid }) => {
+            socket.on(Channels_1.JOINED_CALL, ({ peerid, roomid }) => {
                 console.log(`User ${peerid} joined the room`);
                 /* Contact other sockets connected */
-                socket.broadcast.emit(Channels_1.USER_CONNECTED, { peerid });
+                socket.broadcast.to(roomid).emit(Channels_1.USER_CONNECTED, { peerid });
             });
             /* Connect to chat rooms */
             socket.on(Channels_1.CONNECT_TO_CHATS, ({ token }) => {

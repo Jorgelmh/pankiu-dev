@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as db from "../../db/Database";
 import * as jwt from "jsonwebtoken";
-import Patient from "../../interfaces/entities/Patient";
+import Patient, { Mood } from "../../interfaces/entities/Patient";
 import Counselor from "../../interfaces/entities/Counselor";
 import User from "../../interfaces/entities/User";
 
@@ -197,4 +197,42 @@ export const updateDetails = async (
       token,
     });
   });
+};
+
+/* Change the mood of a patient */
+export const changeMood = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  /* Model user data */
+  const user: Patient = req.body.decoded;
+  const newMood: Mood = req.body.mood;
+
+  try {
+    /* Change the mood stores in the db */
+    await db.changeMood(user.id, newMood);
+  } catch (e) {
+    return res.json({
+      ok: false,
+      message: "An error has ocurred while changing your mood",
+    });
+  }
+
+  /* Update and return session token */
+  user.mood = newMood
+
+  jwt.sign(user, process.env.secret, (err, token) => {
+    /* Check if there's an error */
+    if (err) {
+      return res.json({
+        ok: false,
+        message: "Error while creating a new session token",
+      });
+    }
+
+    return res.json({
+      ok: true,
+      token
+    })
+  })
 };

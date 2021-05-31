@@ -4,6 +4,7 @@ import {
   register,
   login,
   updateDetails,
+  changeMood
 } from "./controllers/SessionController";
 
 /**
@@ -28,5 +29,8 @@ export default class Session {
 
     /* Update user's information */
     this.app.put("/sessions/update", AuthToken, updateDetails);
+
+    /* Change the mood of a patient on the database */
+    this.app.put("/sessions/changemood", AuthToken, changeMood);
   }
 }

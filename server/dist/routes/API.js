@@ -18,8 +18,6 @@ class API {
         this.app.get("/api/chats", AuthToken_1.AuthToken, ApiController_1.fetchChat);
         /* Get messages of a specific chat */
         this.app.get("/api/messages/:uid", AuthToken_1.AuthToken, ApiController_1.fetchMessages);
-        /* Change the mood of a patient on the database */
-        this.app.put("/api/changemood", AuthToken_1.AuthToken, ApiController_1.changeMood);
         /* Return random motivaltional phrase */
         this.app.get("/api/quotes", ApiController_1.fetchQuotes);
         /* Add friends */
